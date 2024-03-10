@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Register from './user/register';
 import Login from './user/login';
+import './index.css'
 import { NotFound } from './user/notFoundPage';
+import Post from './app/post';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/',
+    element: <Post />
   }
 ]);
 

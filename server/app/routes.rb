@@ -60,7 +60,7 @@ class App < Roda
                 end
     
                 r.post "create" do
-                    ret = @user.create_post data
+                    ret = @user.create_post params
                     {
                         values: ret,
                         success: true

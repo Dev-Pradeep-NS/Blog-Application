@@ -4,6 +4,7 @@ Sequel.migration do
             primary_key :id
             String      :name, :allow_blank => false
             String      :comment, :allow_blank => false
+            TrueClass   :is_flagged, default: false
 
             DateTime    :created_at
             DateTime    :updated_at

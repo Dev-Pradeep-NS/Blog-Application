@@ -4,8 +4,11 @@ Sequel.migration do
             primary_key :id
             String      :title, :allow_blank => false
             String      :content, :allow_blank => false
-
-            foreign_key :userid
+            String      :status
+            String      :visibility
+            String      :image_url
+            String      :category
+            
             DateTime    :created_at
             DateTime    :updated_at
             DateTime    :deleted_at

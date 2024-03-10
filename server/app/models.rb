@@ -57,16 +57,41 @@ class User < Sequel::Model(DB[:users])
         user_obj
     end
 
-    def create_post data
-        raise "Title is Required" if data[:title].nil?
-        raise "Provide some content" if data[:content].nil?
+    def create_post params
+        raise "Title is Required" if params[:title].nil?
+        raise "Provide some content" if params[:content].nil?
+        raise "what is the status" if params[:status].nil?
+        raise "image is required" if params[:pic].nil?
+        
+        filename = nil
+        if params[:pic] and params[:pic][:tempfile]
+            fileptr = params[:pic][:tempfile]
+
+            fileext = params[:pic][:type].split('/')[1]
+            filename = "#{Util.getUniqueName}.#{fileext}"
+
+			file_save_as = "#{$uploads_dir}/#{filename}"
+
+			File.open(file_save_as, "wb") do |save_file|
+				save_file.write(fileptr.read)
+			end
+        end
 
         post = {
-            title: data[:title],
-            content: data[:content]
+            title: params[:title],
+            content: params[:content],
+            status: params[:status],
+            visibility: params[:visibility],
+            category: params[:category],
+            image_url: filename
         }
+        
         post = self.add_post(post)
         post.save
+
+        # post.value.merge(
+        #     image_url: "#{$admin_server_url}#{$uploads_path}#{gallery.values[:pic_large_url]}",
+        # )
         post
     end
 

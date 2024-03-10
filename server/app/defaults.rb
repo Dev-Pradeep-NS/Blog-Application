@@ -1,3 +1,5 @@
+$uploads_dir = ENV['UPLOADS_DIR']
+
 class App < Roda
     plugin :indifferent_params
 	plugin :json
@@ -14,5 +16,10 @@ class App < Roda
 			data
 		end
 	end
-    
+end
+
+module Util
+	def self.getUniqueName
+		DateTime.now.strftime('%Q').to_s + rand(1111111..9999999).to_s
+	end
 end
