@@ -5,7 +5,8 @@ import Register from './user/register';
 import Login from './user/login';
 import './index.css'
 import { NotFound } from './user/notFoundPage';
-import Post from './app/post';
+import PostForm from './app/createpost';
+import Posts from './app/posts';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Post />
+    element: <PostForm />
+  },
+  {
+    path: '/notfound',
+    element: <NotFound />
+  },
+  {
+    path: '/posts',
+    element: <Posts />
   }
 ]);
 

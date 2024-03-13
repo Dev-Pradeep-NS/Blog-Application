@@ -88,10 +88,10 @@ class User < Sequel::Model(DB[:users])
         
         post = self.add_post(post)
         post.save
-
-        # post.value.merge(
-        #     image_url: "#{$admin_server_url}#{$uploads_path}#{gallery.values[:pic_large_url]}",
-        # )
+        
+        post.values.merge(
+            image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+        )
         post
     end
 
@@ -111,7 +111,11 @@ class User < Sequel::Model(DB[:users])
                 id: post.id,
                 title: post.title,
                 content: post.content,
-                created_date: post.created_at
+                created_date: post.created_at,
+                status: post.status,
+                visibility: post.visibility,
+                category: post.category,
+                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
             }
         end
         all_posts

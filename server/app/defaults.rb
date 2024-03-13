@@ -1,5 +1,8 @@
 $uploads_dir = ENV['UPLOADS_DIR']
 
+$uploads_path = "/images/"
+$server_url = ENV['SERVER_URL']
+
 class App < Roda
     plugin :indifferent_params
 	plugin :json
