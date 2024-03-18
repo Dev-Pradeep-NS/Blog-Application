@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 
 const PostData = () => {
     const [data, setData] = useState([]);
@@ -25,23 +26,25 @@ const PostData = () => {
             setLoading(false);
         }
     };
+
     return (
         <div>
             {loading ? (
                 <p>Loading....</p>
-            ):
-            error ? (
-                <p>Error: {error}</p>
-            ) : (
-                <ul>
-                    {data.values.map((item) => (
-                        <li key={item.id}>
-                            <img src={item.image_url} alt="" />
-                            <div>{item.id}</div>
-                        </li>
-                    ))}
-                </ul>
-            )}
+            ) :
+                error ? (
+                    <p>Error: {error}</p>
+                ) : (
+                    <ul>
+                        {data.values.map((item) => (
+                            <li key={item.id}>
+                                <img src={item.image_url} alt="" />
+                                <Link to={`/post/${item.id}`}>{item.title}</Link>
+                                <p>{item.content}</p>
+                            </li>
+                        ))}
+                    </ul>
+                )}
         </div>
     )
 

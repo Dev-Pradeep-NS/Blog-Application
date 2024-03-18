@@ -70,7 +70,15 @@ class App < Roda
                 r.on Integer do |post_id|
                     post = Post[post_id.to_i]
                     raise 'Invalid Post' if !post
-    
+                    
+                    r.get do
+                        ret = post.get_all
+                        {
+                            values: ret,
+                            success: true
+                        }
+                    end
+                    
                     r.post do
                         ret = post.update_post data
     

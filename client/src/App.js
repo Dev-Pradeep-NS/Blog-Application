@@ -4,7 +4,7 @@ import Login from './user/login';
 import { NotFound } from './user/notFoundPage';
 import PostForm from './app/createpost';
 import Posts from './app/posts';
-import Post from './app/post';
+import Post from './app/showpost';
 
 const router = createBrowserRouter([
     {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <Posts />
     },
     {
-        path: '/post/1',
+        path: '/post/:id',
         element: <Post />
     }
 ]);
