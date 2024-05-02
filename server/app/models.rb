@@ -18,7 +18,7 @@ class User < Sequel::Model(DB[:users])
                         :class => :Post
 
     def self.login data
-        user = self.find(username: data[:username])
+        user = self.find(email: data[:email])
         raise "Invalid User" if !user
 
         password_digest = BCrypt::Password.new(user.password_digest)
@@ -29,7 +29,7 @@ class User < Sequel::Model(DB[:users])
 
         {
             token: user.token,
-            username: data[:username]
+            email: data[:email]
         }
         
     end
@@ -43,7 +43,6 @@ class User < Sequel::Model(DB[:users])
         user_obj = {
             username: data[:username],
             email: data[:email],
-            mobile: data[:mobile],
             password_digest: BCrypt::Password.create(data[:password])
         }
 

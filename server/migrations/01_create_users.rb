@@ -9,8 +9,6 @@ Sequel.migration do
 
             String      :email
 
-            String      :mobile
-
             String		:password_digest
 
 			String		:password_text
