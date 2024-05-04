@@ -23,13 +23,18 @@ class User < Sequel::Model(DB[:users])
 
         password_digest = BCrypt::Password.new(user.password_digest)
         raise "Invalid Password" if password_digest != data[:password]
+        username = user.username
+        createdDate = user.created_at
+
         user.update(
             token: SecureRandom.hex(10),
         )
 
         {
             token: user.token,
-            email: data[:email]
+            email: data[:email],
+            username: username,
+            created_at: createdDate
         }
         
     end
