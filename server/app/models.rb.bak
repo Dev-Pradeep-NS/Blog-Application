@@ -36,6 +36,7 @@ class User < Sequel::Model(DB[:users])
             username: username,
             created_at: createdDate
         }
+        
     end
 
     def self.register data
@@ -43,7 +44,7 @@ class User < Sequel::Model(DB[:users])
         raise "Email is required" if data[:email].nil?
 
         exist_user = self.find(username: data[:username])
-
+        
         user_obj = {
             username: data[:username],
             email: data[:email],
@@ -56,83 +57,67 @@ class User < Sequel::Model(DB[:users])
             new_user = User.new(user_obj)
             new_user.save
         end
-
+        
         user_obj
     end
 
-    def create_post data
+end
+
+class Post < Sequel::Model(DB[:posts])
+    
+    one_to_many         :comments,
+    :key   => :post_id,
+    :class => :Comment
+    
+    def self.create_post data
         raise "Title is Required" if data[:title].nil?
         raise "Provide some content" if data[:content].nil?
         # raise "image is required" if data[:pic].nil?
         raise "Category is required" if data[:category].nil?
         raise "Visibilty is required" if data[:visibility].nil?
 
+        token = data[:an_token] || data[:an_token] || nil
+        puts token
+        raise "No token." if token.nil?
+
+        user = User.find(token: token)
+        raise "only registered users are allowed" if !user
+    
         filename = nil
         if data[:pic] and data[:pic][:tempfile]
             fileptr = data[:pic][:tempfile]
-
+    
             fileext = data[:pic][:type].split('/')[1]
             filename = "#{Util.getUniqueName}.#{fileext}"
-
-			file_save_as = "#{$uploads_dir}/#{filename}"
-
-			File.open(file_save_as, "wb") do |save_file|
-				save_file.write(fileptr.read)
-			end
+    
+            file_save_as = "#{$uploads_dir}/#{filename}"
+    
+            File.open(file_save_as, "wb") do |save_file|
+                save_file.write(fileptr.read)
+            end
         end
-
+    
         post = {
             title: data[:title],
             content: data[:content],
             visibility: data[:visibility],
             category: data[:category],
-            # user_id: user.id
+            user_id: user.id
             # image_url: filename
         }
-
-        post = self.add_post(post)
+        
+        post = Post.new(post)
         post.save
-
+        
         post.values.merge(
             image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
         )
         post
     end
-
-    def get_all
-        all_posts = Post.reverse(:created_at).where(user_id: self.id).all.collect do |post|
-            {
-                id: post.id,
-                title: post.title,
-                content: post.content,
-                created_date: post.created_at,
-                visibility: post.visibility,
-                category: post.category,
-                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
-            }
-        end
-        all_posts
-    end
-
-end
-
-class Post < Sequel::Model(DB[:posts])
-
-    one_to_many         :comments,
-                        :key   => :post_id,
-                        :class => :Comment
-
-
-
-    def create_comment data
-		raise "comment something" if data[:comment].nil?
-        comment = {
-            name: data[:name],
-            comment: data[:comment]
-        }
-        comment = self.add_comment(comment);
-        comment.save
-        comment
+    
+    def delete_post
+        raise "post is already deleted" if self.deleted?
+        self.soft_delete
     end
 
     def update_post data
@@ -141,6 +126,7 @@ class Post < Sequel::Model(DB[:posts])
         # raise "image is required" if data[:pic].nil?
         raise "Category is required" if data[:category].nil?
         raise "Visibilty is required" if data[:visibility].nil?
+
 
         filename = nil
         if data[:pic] and data[:pic][:tempfile]
@@ -156,7 +142,7 @@ class Post < Sequel::Model(DB[:posts])
             end
         end
 
-        post = {
+        update_post = {
             title: data[:title],
             content: data[:content],
             visibility: data[:visibility],
@@ -164,8 +150,38 @@ class Post < Sequel::Model(DB[:posts])
             image_url: filename
         }
 
-        self.update(post);
-        post
+        self.update(update_post);
+        update_post
+    end
+
+    def self.get_all_posts
+        all_posts = Post.reverse(:created_at).all.collect do |post|
+            {
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                created_date: post.created_at,
+                visibility: post.visibility,
+                category: post.category,
+                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+            }
+        end
+        all_posts
+    end
+
+    def get_user_post
+        user_post = Post.reverse(:created_at).where(user_id: self.id).all.collect do |post|
+            {
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                created_date: post.created_at,
+                visibility: post.visibility,
+                category: post.category,
+                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+            }
+        end
+        user_post
     end
 
     def get_post
@@ -183,9 +199,15 @@ class Post < Sequel::Model(DB[:posts])
         post
     end
 
-    def delete_post
-        raise "post is already deleted" if self.deleted_at
-        self.delete
+    def create_comment data
+        comment = {
+            name: data[:name],
+            comment: data[:comment],
+            post_id: data[:post_id]
+        }
+        comment = self.add_comment(comment);
+        comment.save
+        comment
     end
 
     def get_all_comments
@@ -200,14 +222,5 @@ class Post < Sequel::Model(DB[:posts])
 end
 
 class Comment < Sequel::Model(DB[:comments])
-
-	def update_comment data
-		raise "comment something" if data[:comment].nil?
-		
-        comment = {
-            comment: data[:comment]
-        }
-        self.update(comment);
-        comment
-	end
+    
 end

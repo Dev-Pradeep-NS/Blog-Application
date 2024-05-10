@@ -4,7 +4,6 @@ Sequel.migration do
             primary_key :id
             String      :title, :allow_blank => false
             String      :content, :allow_blank => false
-            String      :status
             String      :visibility
             String      :image_url
             String      :category
