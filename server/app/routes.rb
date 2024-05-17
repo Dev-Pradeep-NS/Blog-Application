@@ -23,7 +23,7 @@ class App < Roda
         data = indifferent_data(data)
 
         r.root do
-            render('login')
+            puts "Blog Application"
         end
 
         r.post "register" do
@@ -42,22 +42,65 @@ class App < Roda
             }
         end
 
+		r.on "posts/getall" do
+			r.get do
+				ret = Post.get_all
+				{
+					values: ret,
+					success: true
+				}
+			end
+		end
+
         r.on "user" do
-            token = data[:an_token] || data[:an_token] || nil
+			r.on Integer do |id|
+				user = User[id.to_i]
+				raise "user not found" if !user
+
+				r.get "posts" do
+					ret = user.get_all
+                    {
+                        values: ret,
+                        success: true
+                    }
+				end
+			end
+
+            token = data[:an_token] || nil
             raise "No token." if token.nil?
 
             @user = User.find(token: token)
             raise "only registered users are allowed" if !@user
 
-            r.on "posts/getall" do
-                r.get do
-                    ret = @user.get_all
-                    {
-                        values: ret,
-                        success: true
-                    }
-                end
-            end
+			r.on "follow" do
+				r.post do
+					ret = Follow.follow data
+					{
+						values: ret,
+						success: true
+					}
+				end
+			end
+
+			r.on "following" do
+				r.get do
+					ret = Follow.following(@user.id)
+					{
+						values: ret,
+						success: true
+					}
+				end
+			end
+
+			r.on "followers" do
+				r.get do
+					ret = Follow.followers(@user.id)
+					{
+						values: ret,
+						success: true
+					}
+				end
+			end
 
             r.on "post" do
                 r.post "create" do
@@ -96,6 +139,40 @@ class App < Roda
                         }
                     end
                 end
+
+				r.on "bookmark" do
+					r.post do
+						ret = @user.add_bookmarked_post data
+						{
+							values: ret,
+							success: true
+						}
+					end
+
+					r.delete do
+						ret = @user.remove_bookmarked_post data
+						{
+							values: ret,
+							success: true
+						}
+					end
+
+					r.get do
+						ret = @user.get_bookmarked_list
+						{
+							values: ret,
+							success: true
+						}
+					end
+				end
+
+				r.on "like" do
+					ret = @user.like_post data
+					{
+						values: ret,
+						succes: true
+					}
+				end
             end
         end
 
@@ -114,7 +191,7 @@ class App < Roda
 					end
 				end
 
-                id = data[:post_id] || data[:post_id] || nil
+                id = data[:post_id] || nil
                 raise "No id." if id.nil?
 
                 @post = Post.find(id: id)
