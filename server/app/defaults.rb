@@ -7,7 +7,7 @@ class App < Roda
     plugin :indifferent_params
 	plugin :json
 	plugin :all_verbs
-	
+
     def indifferent_data(data)
 		case data
 		when Hash

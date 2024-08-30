@@ -121,6 +121,95 @@ class User < Sequel::Model(DB[:users])
         post
     end
 
+	def get_all_user_posts
+        all_posts = Post.reverse(:created_at).where(user_id: self.id).all.collect do |post|
+			liked_post = !Like.where(user_id: self.id, post_id: post.id).empty?
+			bookmarked_post = !Like.where(user_id: self.id, post_id: post.id).empty?
+			likes_count = Like.where(post_id: post.id).count
+			comments_count = Comment.where(post_id: post.id).count
+
+            {
+                user_id: post.user_id,
+                post_id: post.id,
+                liked: liked_post,
+				bookmarked: bookmarked_post,
+				likes_count: likes_count,
+				comments_count: comments_count,
+                title: post.title,
+                content: post.content,
+                created_date: post.created_at,
+                visibility: post.visibility,
+                category: post.category,
+                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+            }
+        end
+        all_posts
+    end
+
+	def get_all_posts data
+        all_posts = Post.reverse(:created_at).all.collect do |post|
+            liked_post = !Like.where(user_id: self.id, post_id: post.id).empty?
+			bookmarked_post = !Like.where(user_id: self.id, post_id: post.id).empty?
+			likes_count = Like.where(post_id: post.id).count
+            comments_count = Comment.where(post_id: post.id).count
+
+            {
+                user_id: post.user_id,
+                post_id: post.id,
+                liked: liked_post,
+				bookmarked: bookmarked_post,
+				likes_count: likes_count,
+				comments_count: comments_count,
+                title: post.title,
+                content: post.content,
+                created_date: post.created_at,
+                visibility: post.visibility,
+                category: post.category,
+                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+            }
+        end
+        all_posts
+    end
+
+	def like_post data
+		post_id = data[:post_id]
+		liked = Like.where(post_id: post_id, user_id: self.id).first
+		return liked if liked
+
+		like_post = {
+			user_id: self.id,
+			post_id: post_id,
+			like: true
+		}
+
+		like = Like.new(like_post)
+		like.save
+		like_post
+	end
+
+	def get_liked_posts data
+		liked_post = Like.where(user_id: self.id, like: true).all.collect do |like|
+
+			post = Post.where(id: like.post_id).first
+			bookmarked_post = !Like.where(user_id: self.id, post_id: like.post_id).empty?
+			likes_count = Like.where(post_id: like.post_id).count
+            comments_count = Comment.where(post_id: like.post_id).count
+			{
+				user_id: post.user_id,
+                post_id: post.id,
+				bookmarked: bookmarked_post,
+				likes_count: likes_count,
+				comments_count: comments_count,
+                title: post.title,
+                content: post.content,
+                created_date: post.created_at,
+                visibility: post.visibility,
+                category: post.category,
+                # image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
+			}
+		end
+	end
+
 	def add_bookmarked_post data
 		raise "post is required" if data[:post_id].nil?
 
@@ -151,7 +240,7 @@ class User < Sequel::Model(DB[:users])
 		bookmarked_posts = self.bookmarked_posts.collect do |post|
 			{
 				user_id: post.user_id,
-				id: post.id,
+				post_id: post.id,
 				title: post.title,
 				content: post.content,
 				created_date: post.created_at,
@@ -163,20 +252,50 @@ class User < Sequel::Model(DB[:users])
 		bookmarked_posts
 	end
 
-	def like_post data
-		post_id = data[:post_id]
-		liked = Like.where(post_id: post_id, user_id: self.id).first
-		return liked if liked
+	def follow data
+		raise "Follower user not found" if self.id.nil?
+		raise "Followed user not found" if data[:followed_id].nil?
 
-		like_post = {
-			user_id: self.id,
-			post_id: post_id,
-			like: true
+		existing_follow = Follow.where(follower_id: self.id, followed_id: data[:followed_id]).first
+		return existing_follow if existing_follow
+
+		follow = {
+			follower_id: self.id,
+			followed_id: data[:followed_id].to_i,
+			status: data[:status]
 		}
 
-		like = Like.new(like_post)
-		like.save
-		like_post
+		follow = Follow.new(follow)
+		follow.save
+		follow
+	end
+
+	def following data
+        following = Follow.where(follower_id: self.id).all.collect do |follow|
+
+			user = User.where(id: follow.followed_id).first
+            {
+                id: follow.followed_id,
+                status: follow.status,
+				username: user.username,
+				email: user.email
+            }
+        end
+        following
+    end
+
+	def followers data
+		followers = Follow.where(followed_id: self.id).all.collect do |follow|
+
+			user = User.where(id: follow.follower_id).first
+            {
+                id: follow.follower_id,
+                status: follow.status,
+				username: user.username,
+				email: user.email
+            }
+        end
+        followers
 	end
 end
 
@@ -254,7 +373,7 @@ class Post < Sequel::Model(DB[:posts])
         post = Post.reverse(:created_at).where(id: self.id).all.collect do |post|
             {
 				user_id: post.user_id,
-                id: post.id,
+                post_id: post.id,
                 title: post.title,
                 content: post.content,
                 created_date: post.created_at,
@@ -264,22 +383,6 @@ class Post < Sequel::Model(DB[:posts])
             }
         end
         post
-    end
-
-	def self.get_all
-        all_posts = Post.reverse(:created_at).all.collect do |post|
-            {
-				user_id: post.user_id,
-                id: post.id,
-                title: post.title,
-                content: post.content,
-                created_date: post.created_at,
-                visibility: post.visibility,
-                category: post.category,
-                image_url: "#{$server_url}#{$uploads_path}#{post.values[:image_url]}"
-            }
-        end
-        all_posts
     end
 
     def delete_post
@@ -313,58 +416,6 @@ end
 class Follow < Sequel::Model(DB[:followers])
 	many_to_many :follower, class: :User, key: :follower_id
 	many_to_many :followed, class: :User, key: :followed_id
-
-	def self.follow data
-		token = data[:an_token] || nil
-		raise "No token." if token.nil?
-
-		user = User.find(token: token)
-		raise "User Not found" if !user
-
-		raise "Follower user not found" if user.id.nil?
-		raise "Followed user not found" if data[:followed_id].nil?
-
-		existing_follow = Follow.where(follower_id: user.id, followed_id: data[:followed_id]).first
-		return existing_follow if existing_follow
-
-		follow = {
-			follower_id: user.id,
-			followed_id: data[:followed_id].to_i,
-			status: data[:status]
-		}
-
-		follow = Follow.new(follow)
-		follow.save
-		follow
-	end
-
-	def self.following(user_id)
-        following = Follow.where(follower_id: user_id).all.collect do |follow|
-
-			user = User.where(id: follow.followed_id).first
-            {
-                id: follow.followed_id,
-                status: follow.status,
-				username: user.username,
-				email: user.email
-            }
-        end
-        following
-    end
-
-	def self.followers(user_id)
-		followers = Follow.where(followed_id: user_id).all.collect do |follow|
-
-			user = User.where(id: follow.follower_id).first
-            {
-                id: follow.follower_id,
-                status: follow.status,
-				username: user.username,
-				email: user.email
-            }
-        end
-        followers
-	end
 end
 
 class Bookmark < Sequel::Model(DB[:bookmarks])

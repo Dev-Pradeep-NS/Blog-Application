@@ -42,23 +42,14 @@ class App < Roda
             }
         end
 
-		r.on "posts/getall" do
-			r.get do
-				ret = Post.get_all
-				{
-					values: ret,
-					success: true
-				}
-			end
-		end
-
         r.on "user" do
+
 			r.on Integer do |id|
 				user = User[id.to_i]
 				raise "user not found" if !user
 
 				r.get "posts" do
-					ret = user.get_all
+					ret = user.get_all_user_posts
                     {
                         values: ret,
                         success: true
@@ -72,9 +63,17 @@ class App < Roda
             @user = User.find(token: token)
             raise "only registered users are allowed" if !@user
 
+			r.get "likedposts" do
+				ret = @user.get_all_posts data
+				{
+					values: ret,
+					success: true
+				}
+			end
+
 			r.on "follow" do
 				r.post do
-					ret = Follow.follow data
+					ret = @user.follow data
 					{
 						values: ret,
 						success: true
@@ -84,7 +83,7 @@ class App < Roda
 
 			r.on "following" do
 				r.get do
-					ret = Follow.following(@user.id)
+					ret = @user.following data
 					{
 						values: ret,
 						success: true
@@ -94,7 +93,7 @@ class App < Roda
 
 			r.on "followers" do
 				r.get do
-					ret = Follow.followers(@user.id)
+					ret = @user.followers data
 					{
 						values: ret,
 						success: true
@@ -166,8 +165,16 @@ class App < Roda
 					end
 				end
 
-				r.on "like" do
+				r.post "like" do
 					ret = @user.like_post data
+					{
+						values: ret,
+						succes: true
+					}
+				end
+
+				r.get "liked" do
+					ret = @user.get_liked_posts data
 					{
 						values: ret,
 						succes: true
