@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/home";
 function App() {
 	return (
-		<div className="App">
-			<p>Hello world</p>
-		</div>
+		<Router>
+			<div className="App">
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+				</Routes>
+			</div>
+		</Router>
 	);
 }
 
