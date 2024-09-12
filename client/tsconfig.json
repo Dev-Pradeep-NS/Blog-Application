@@ -16,5 +16,10 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
+	"plugins": {
+    "transform-dotenv": {
+      "allowUndefined": true
+    }
+  },
 	"include": ["src", "./"]
 }

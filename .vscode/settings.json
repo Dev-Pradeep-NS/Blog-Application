@@ -6,7 +6,7 @@
     "**/node_modules": true
   },
   "files.trimTrailingWhitespace": true,
-  "editor.tabSize": 4,
+  "editor.tabSize": 2,
   "editor.insertSpaces": false,
   "editor.formatOnSave": true,
   "editor.detectIndentation": false
