@@ -4,6 +4,7 @@ const NavBar = () => {
 	return (
 		<div className="flex flex-row items-center my-2 justify-between">
 			<div className="basis-3/4 flex flex-row items-center">
+				<img src='/logo.png' alt="Logo" style={{ height: 100, width: 100 }} />
 				<h1 className="text-2xl font-semibold ">Pradeep Blogs</h1>
 				<h2 className='mx-3'>LATEST</h2>
 				<h2 className='mx-3'>TRENDING</h2>
