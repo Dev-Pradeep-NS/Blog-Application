@@ -12,7 +12,7 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 				<br />
 				<div className='flex flex-row'>
 					{postData[0].user.avatar_url && <img src={getAvatarUrl(postData[0].user.avatar_url)} alt="" width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} />}
-					<p><span className="text-green">{postData[0].user.username}</span> <br /> {formatDate(postData[0].created_at)} - 12 min read</p>
+					<p><span className="text-green-500">{postData[0].user.username}</span> <br /> {formatDate(postData[0].created_at)} - 12 min read</p>
 				</div>
 			</div>
 		</div>

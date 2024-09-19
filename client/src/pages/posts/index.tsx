@@ -1,88 +1,48 @@
-import { useEffect, useState } from 'react'
-import {
-	useQuery
-} from 'react-query'
-import RandomPost from './RandomPost'
-import NavBar from '../../components/common/NavBar'
-import Posts from './PostCard'
-import LatestPosts from './LatestPosts'
-import type { ItemType, User, Follower } from '../../interfaces'
+import { useMemo } from 'react';
+import RandomPost from './RandomPost';
+import NavBar from '../../components/common/NavBar';
+import Posts from './PostCard';
+import LatestPosts from './LatestPosts';
+import { usePost } from '../../utils/hooks/use-posts';
+import { useUserDetails, useUserFollowers } from '../../utils/hooks/use-userdetails';
 
-const HomePage = () => {
-	const token = process.env.REACT_APP_TOKEN
-	const server_url = process.env.REACT_APP_SERVER_URL
-	const [state, setState] = useState({
-		userDetails: {} as User,
-		followers: {} as Follower
-	})
+const PostPage = () => {
+	const token = process.env.REACT_APP_TOKEN || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
-	const user: User = state?.userDetails;
-	const followers: Follower = state?.followers
+	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(server_url, token);
+	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(server_url, token);
+	const user_id = userData?.id ?? 0;
+	const { isLoading: followersLoading, error: followersError, data: followers } = useUserFollowers(server_url, user_id, token);
 
-	useEffect(() => {
-		fetchCurrentUserDetails()
-		fetchUserFollowers()
-	}, [])
+	const memoizedPostList = useMemo(() => {
+		return Array.isArray(postData) ? postData : [];
+	}, [postData]);
 
-	const { isLoading, error, data } = useQuery('PostData', async () => {
-		try {
-			const response = await fetch(`${server_url}/posts`, {
-				headers: { 'Authorization': `Bearer ${token}` }
-			})
-			if (!response.ok) {
-				throw new Error('Network response was not ok')
-			}
-			return response.json()
-		} catch (error) {
-			console.error('Error fetching data:', error)
-			throw error
-		}
-	})
+	const memoizedUserData = useMemo(() => userData, [userData]);
+	const memoizedFollowers = useMemo(() => followers, [followers]);
 
-	const postData: ItemType[] = data
+	if (postsLoading || userLoading || followersLoading) return <div>Loading...</div>;
+	if (postsError || userError || followersError) return <div>An error has occurred.</div>;
 
-	const fetchCurrentUserDetails = async () => {
-		try {
-			const response = await fetch(`${server_url}/users/`, {
-				headers: { 'Authorization': `Bearer ${token}` }
-			});
-			const data = await response.json();
-			setState(prev => ({ ...prev, userDetails: data }));
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	const fetchUserFollowers = async () => {
-		try {
-			const response = await fetch(`${server_url}/users/${user.id}/followers`, {
-				headers: { 'Authorization': `Bearer ${token}` }
-			});
-			const data = await response.json();
-			setState(prev => ({ ...prev, followers: data }))
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	if (isLoading) return <div>Loading...</div>
-
-	if (error) return <div>An error has occurred: {error.toString()}</div>
+	if (!memoizedUserData) return <div>User data not available.</div>;
+	if (!memoizedFollowers) return <div>Followers data not available.</div>;
 
 	return (
-		<div className="mx-20 my-5 font-cas">
+		<div className="container mx-auto font-cas">
 			<NavBar />
-			<hr className='my-8' />
-			<div className='mx-10'>
-				<RandomPost postData={postData} />
-				<Posts postData={postData} length={3} />
+			<hr />
+			<div>
+				<RandomPost postData={memoizedPostList} />
+				<Posts postData={memoizedPostList} length={3} />
 				<h1 className='mt-10 font-light text-2xl'>For Writers and Editors</h1>
 				<hr />
-				<Posts postData={postData} length={postData.length} />
+				<Posts postData={memoizedPostList} length={memoizedPostList.length} />
 				<h1 className='mt-10 font-light text-2xl'>Latest</h1>
-				<LatestPosts postData={postData} user={user} followers={followers} />
+				<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />
 			</div>
 		</div>
-	)
+	);
+
 }
-export default HomePage;
+export default PostPage;

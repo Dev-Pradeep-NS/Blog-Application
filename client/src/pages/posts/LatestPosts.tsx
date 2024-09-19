@@ -37,7 +37,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 					<p className='text-sm'>The {user?.username} Blog</p>
 				</div>
 				<p className='text-sm mb-2'>The official Pradeep Blog.</p>
-				<p className='text-sm mb-2 text-green'>More information</p>
+				<p className='text-sm mb-2 text-green-500'>More information</p>
 				<p className='mb-2'>Followers - {followers?.followers ? followers?.followers : 0}</p>
 				<p className='mb-2'>ELSEWHERE</p>
 				<SocialIcon url='www.facebook.com' style={{ height: 25, width: 25, margin: '0 1px' }} />
