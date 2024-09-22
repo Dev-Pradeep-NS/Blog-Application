@@ -11,7 +11,8 @@ export const useBookmarks = (server_url: string, token: string) => {
 				}
 			});
 			return data
-		}
+		},
+		enabled: !!token && token.length > 0
 	})
 }
 

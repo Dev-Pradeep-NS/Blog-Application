@@ -3,13 +3,17 @@ import { useQuery } from "react-query";
 import type { Follower, User } from "../../interfaces";
 
 export const useUserDetails = (server_url: string, token: string) => {
-	return useQuery<User, Error>('userDetails', async () => {
-		const { data } = await axios.get(`${server_url}/users/`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		return data;
+	return useQuery<User, Error>({
+		queryKey: ['userDetails'],
+		queryFn: async () => {
+			const { data } = await axios.get(`${server_url}/users/`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			return data;
+		},
+		enabled: !!token && token.length > 0,
 	});
 };
 
@@ -24,6 +28,6 @@ export const useUserFollowers = (server_url: string, user_id: number, token: str
 			});
 			return data;
 		},
-		enabled: !!user_id
+		enabled: !!user_id && !!token && token.length > 0,
 	});
 };

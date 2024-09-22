@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useShowPost } from '../../utils/hooks/use-posts';
-import { getAvatarUrl, getImageUrl } from '../../utils/helpers/getImageUrl';
+import { useShowPost } from '../../../utils/hooks/usePosts';
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
@@ -10,26 +9,27 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { MdBookmarkAdded } from "react-icons/md";
 import { CiPlay1 } from "react-icons/ci";
 import { CiPause1 } from "react-icons/ci";
-import { useComment } from '../../utils/hooks/use-comments';
-import formatDate from '../../utils/helpers/formatDate';
+import { useComment } from '../../../utils/hooks/useComments';
+import formatDate from '../../../utils/helpers/formatDate';
 import { useMemo, useState, useEffect } from 'react';
-import { useDisLikePost, useLikePost, useReactions } from '../../utils/hooks/use-reactions';
-import { useUserDetails } from '../../utils/hooks/use-userdetails';
-import type { Bookmark, Comments, Reaction } from '../../interfaces';
-import { useBookmarkPost, useBookmarks } from '../../utils/hooks/use-bookmarks';
-import { useGetAccessToken } from '../../utils/hooks/use-getAccesstoken';
-import { CommentSection } from './comments';
+import { useDisLikePost, useLikePost, useReactions } from '../../../utils/hooks/useReactions';
+import { useUserDetails } from '../../../utils/hooks/useUserdetails';
+import type { Bookmark, Comments, Reaction } from '../../../interfaces';
+import { useBookmarkPost, useBookmarks } from '../../../utils/hooks/useBookmarks';
+import { CommentSection } from '../comments';
+import { useAuth } from '../../../utils/hooks/AuthContext';
+import useImageUrls from '../../../utils/helpers/getImageUrl';
 
 const ViewPost = () => {
 	const [speechStatus, setSpeechStatus] = useState(false);
 	const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 	const [showCommentSection, setShowCommentSection] = useState(false)
+	const { getImageUrl, getAvatarUrl } = useImageUrls();
 	const { username, slug } = useParams();
 	const userName = username?.replace("@", "") || '';
-	const token = process.env.REACT_APP_TOKEN || '';
+	const { token } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
-	const { mutate: getToken } = useGetAccessToken(server_url);
 	const { isLoading: postLoading, error: postError, data: postData } = useShowPost(server_url, userName, slug || '', token);
 	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(server_url, token);
 	const { isLoading: commentsLoading, error: commentsError, data: commentsData } = useComment(server_url, postData?.id || 0, token);
@@ -50,7 +50,6 @@ const ViewPost = () => {
 	const isBookmarked = memoizedBookmarkData?.some((item: Bookmark) => item.user_id === memoizedUserData?.id && item.post_id === postData?.id)
 
 	useEffect(() => {
-		getToken()
 		const synth = window.speechSynthesis;
 		const u = new SpeechSynthesisUtterance(
 			`${memoizedPostData?.title} - ${memoizedPostData?.description} - ${memoizedPostData?.content}`
@@ -60,8 +59,9 @@ const ViewPost = () => {
 		return () => {
 			synth.cancel();
 		};
-	}, [memoizedPostData, getToken]);
+	}, [memoizedPostData]);
 
+	if (!token) return <p>Loading access token</p>
 	if (postLoading || commentsLoading || reactionsLoading || userLoading || bookmarLoading) return <p>Loading...</p>;
 	if (postError || commentsError || reactionsError || userError || bookmarkError) return <p>Error: {postError instanceof Error ? postError.message : 'Unknown error'}</p>;
 
@@ -80,7 +80,7 @@ const ViewPost = () => {
 		<div className='font-cas place-self-center container mx-auto my-10 static' style={{ width: '40rem' }}>
 			<img src={memoizedPostData?.featuredImage_url ? getImageUrl(memoizedPostData.featuredImage_url) : ''} alt="imageurl" className='w-auto h-auto mx-auto' />
 			<p className='text-center font-medium text-base my-5'>{memoizedPostData?.title}</p>
-			<h1 className='text-2xl font-bold'>{memoizedPostData?.title}</h1>
+			<h1 className='text-2xl font-semibold'>{memoizedPostData?.title}</h1>
 			<p>{memoizedPostData?.description}</p>
 			<div className='flex flex-row my-5'>
 				<img src={memoizedPostData?.user?.avatar_url ? getAvatarUrl(memoizedPostData?.user.avatar_url) : ''} alt='' width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} />

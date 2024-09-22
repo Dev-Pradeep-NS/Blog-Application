@@ -1,0 +1,8 @@
+/* Hide scrollbar */
+form {
+    scrollbar-width: none; /* Firefox */
+}
+
+form::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

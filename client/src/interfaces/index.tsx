@@ -21,6 +21,16 @@ interface ItemType {
 	featuredImage_url: string,
 }
 
+interface PostData {
+	title: string;
+	description: string;
+	content: string;
+	status: string;
+	category: string;
+	tags: string;
+	image?: File;
+}
+
 interface User {
 	id: number,
 	username: string,
@@ -70,6 +80,13 @@ interface Comments {
 	count: number;
 }
 
+interface IFormInput {
+	username: string;
+	email: string;
+	password: string;
+	confirm_password: string;
+}
+
 export type {
-	ItemType, User, Follower, Reaction, Bookmark, Comments
+	ItemType, User, Follower, Reaction, Bookmark, Comments, IFormInput, PostData
 }

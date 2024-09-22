@@ -3,7 +3,8 @@ import type { Comments } from "../../../interfaces"
 import { FiX } from "react-icons/fi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { useState } from "react";
-import { usePostComment, useReplyComment } from "../../../utils/hooks/use-comments";
+import { usePostComment, useReplyComment } from "../../../utils/hooks/useComments";
+import { useAuth } from "../../../utils/hooks/AuthContext";
 
 interface CommentSectionProps {
 	comments: Comments | undefined;
@@ -13,8 +14,7 @@ interface CommentSectionProps {
 }
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ comments, onClose, username, postId }) => {
-	console.log(JSON.stringify(comments))
-	const token = process.env.REACT_APP_TOKEN || '';
+	const { token } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 	const [showReplyId, setShowReplyId] = useState<number | null>(null)
 	const [showReplies, setShowReplies] = useState<number | null>(null)
