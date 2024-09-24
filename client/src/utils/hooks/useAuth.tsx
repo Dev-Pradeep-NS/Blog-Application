@@ -15,7 +15,8 @@ export const useRegister = (server_url: string) => {
 				{
 					headers: {
 						'Content-Type': 'application/json'
-					}
+					},
+					withCredentials: true
 				}
 			);
 			return response.data;
@@ -35,7 +36,8 @@ export const useLogin = (server_url: string) => {
 				{
 					headers: {
 						'Content-Type': 'application/json'
-					}
+					},
+					withCredentials: true
 				}
 			);
 			return response.data;
@@ -43,10 +45,15 @@ export const useLogin = (server_url: string) => {
 	});
 };
 
-export const useLogout = () => {
-	return () => {
-		const yesterday = new Date();
-		yesterday.setDate(yesterday.getDate() - 1);
-		document.cookie = `refresh_token=; expires=${yesterday.toUTCString()}; Secure; SameSite=Strict; path=/;`;
-	};
+
+export const useLogout = (server_url: string) => {
+	return useMutation({
+		mutationFn: async () => {
+			const response = await axios.post(`${server_url}/logout`, {}, {
+				withCredentials: true
+			}
+			);
+			return response
+		}
+	})
 };

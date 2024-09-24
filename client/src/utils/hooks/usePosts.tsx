@@ -1,16 +1,21 @@
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
+import { usePostStore } from "../../store";
 import type { ItemType, PostData } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 
 export const usePost = (server_url: string, token: string) => {
+	const { setPostData } = usePostStore();
+
 	return useQuery({
+		queryKey: ["getPosts"],
 		queryFn: async () => {
 			const { data } = await axios.get(`${server_url}/posts`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
 				},
 			});
+			setPostData(data);
 			return data as ItemType;
 		},
 		enabled: token.length > 0 && !!token,

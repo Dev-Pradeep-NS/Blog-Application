@@ -9,8 +9,8 @@ interface ItemType {
 	slug: string,
 	status: string,
 	view_count: number,
-	comments: Array<string>,
-	LikesandDislikes: Array<string>,
+	Comments: Comment[],
+	LikesandDislikes: Reaction[],
 	user: {
 		avatar_url: string,
 		username: string,

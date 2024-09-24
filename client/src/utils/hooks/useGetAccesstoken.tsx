@@ -6,8 +6,8 @@ export const useGetAccessToken = (server_url: string) => {
 		mutationFn: async () => {
 			const response = await axios.post(`${server_url}/refresh`, {}, {
 				withCredentials: true
-			})
+			});
 			return response.data;
 		},
-	})
-}
+	});
+};

@@ -7,25 +7,25 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
 
 	return (
-		<div className='flex flex-row'>
-			<div className='w-2/3'>
+		<div className='flex flex-col lg:flex-row'>
+			<div className='w-full lg:w-2/3'>
 				<hr />
-				<div className='flex flex-col ml-10'>
+				<div className='flex flex-col mx-2 sm:mx-4 lg:ml-10'>
 					{postData?.map((item: ItemType) => {
 						return (
-							<a key={item.id} href={`/@${item.user.username}/${item.slug}`} className='my-3'>
+							<a key={item.id} href={`/@${item.user.username}/${item.slug}`} className='my-2 sm:my-3'>
 								<div key={item.id}>
-									<div className='mb-5 mr-5 flex flex-row justify-between'>
+									<div className='mb-3 sm:mb-5 mr-2 sm:mr-5 flex flex-col sm:flex-row justify-between'>
 										<div>
-											<h1 className='font-semibold text-base'>{item.title}</h1>
-											<p>{item.description}</p>
+											<h1 className='font-semibold text-sm sm:text-base'>{item.title}</h1>
+											<p className='text-xs sm:text-sm'>{item.description}</p>
 											<br />
-											<div className='flex flex-row'>
-												{item.user.avatar_url && <img src={getAvatarUrl(item.user.avatar_url)} alt="" width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} />}
-												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
+											<div className='flex flex-row items-center'>
+												{item.user.avatar_url && <img src={getAvatarUrl(item.user.avatar_url)} alt="" className='w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3' />}
+												<p className='text-xs sm:text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
 											</div>
 										</div>
-										{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="" className='w-28 h-28 border-2 border-slate-200 ml-2' />}
+										{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="" className='w-full sm:w-24 sm:h-24 lg:w-28 lg:h-28 border-2 border-slate-200 mt-2 sm:mt-0 sm:ml-2' />}
 									</div>
 									<hr />
 								</div>
@@ -35,17 +35,19 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 				</div>
 			</div>
 
-			<div className='ml-20'>
-				<div className='flex flex-row'>
-					{user.avatar_url && <img src={getAvatarUrl(user?.avatar_url)} alt="" width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} className="object-contain" />}
-					<p className='text-sm'>The {user?.username} Blog</p>
+			<div className='w-full lg:w-1/3 mt-4 lg:mt-0 lg:ml-10 px-2 sm:px-4 lg:px-0'>
+				<div className='flex flex-row items-center'>
+					{user.avatar_url && <img src={getAvatarUrl(user?.avatar_url)} alt="" className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3 object-contain" />}
+					<p className='text-xs sm:text-sm'>The {user?.username} Blog</p>
 				</div>
-				<p className='text-sm mb-2'>The official Pradeep Blog.</p>
-				<p className='text-sm mb-2 text-green-500'>More information</p>
-				<p className='mb-2'>Followers - {followers?.followers ? followers?.followers : 0}</p>
-				<p className='mb-2'>ELSEWHERE</p>
-				<SocialIcon url='www.facebook.com' style={{ height: 25, width: 25, margin: '0 1px' }} />
-				<SocialIcon url='www.email.com' href='https://in.linkedin.com/' style={{ height: 25, width: 25, margin: '0 1px' }} />
+				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>The official Pradeep Blog.</p>
+				<p className='text-xs sm:text-sm mb-1 sm:mb-2 text-green-500'>More information</p>
+				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>Followers - {followers?.followers ? followers?.followers : 0}</p>
+				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>ELSEWHERE</p>
+				<div className='flex flex-row'>
+					<SocialIcon url='www.facebook.com' style={{ height: 20, width: 20, margin: '0 1px' }} />
+					<SocialIcon url='www.email.com' href='https://in.linkedin.com/' style={{ height: 20, width: 20, margin: '0 1px' }} />
+				</div>
 			</div>
 		</div>
 	)

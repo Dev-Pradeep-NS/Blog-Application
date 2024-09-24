@@ -77,44 +77,55 @@ const ViewPost = () => {
 	}
 
 	return (
-		<div className='font-cas place-self-center container mx-auto my-10 static' style={{ width: '40rem' }}>
-			<img src={memoizedPostData?.featuredImage_url ? getImageUrl(memoizedPostData.featuredImage_url) : ''} alt="imageurl" className='w-auto h-auto mx-auto' />
+		<div className='font-cas place-self-center container mx-auto my-10 px-4 sm:px-6 lg:px-8 max-w-4xl'>
+			<img src={memoizedPostData?.featuredImage_url ? getImageUrl(memoizedPostData.featuredImage_url) : ''} alt="imageurl" className='w-full h-auto mx-auto' />
 			<p className='text-center font-medium text-base my-5'>{memoizedPostData?.title}</p>
-			<h1 className='text-2xl font-semibold'>{memoizedPostData?.title}</h1>
-			<p>{memoizedPostData?.description}</p>
-			<div className='flex flex-row my-5'>
-				<img src={memoizedPostData?.user?.avatar_url ? getAvatarUrl(memoizedPostData?.user.avatar_url) : ''} alt='' width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} />
+			<h1 className='text-2xl sm:text-3xl lg:text-4xl font-semibold'>{memoizedPostData?.title}</h1>
+			<p className='mt-2 text-sm sm:text-base'>{memoizedPostData?.description}</p>
+			<div className='flex flex-row items-center my-5'>
+				<img src={memoizedPostData?.user?.avatar_url ? getAvatarUrl(memoizedPostData?.user.avatar_url) : ''} alt='' className='w-12 h-12 rounded-full mr-4' />
 				<div>
-					<p className='text-sm'>{username?.replace("@", "")}</p>
+					<p className='text-sm font-medium'>{username?.replace("@", "")}</p>
 					<p className='text-xs'>Published in The Pradeep Blog - 12 min - {formatDate(memoizedPostData?.created_at ? memoizedPostData?.created_at : new Date().toLocaleDateString())}</p>
 				</div>
 			</div>
-			<div className='flex flex-row justify-between items-center my-5'>
+			<div className='flex flex-col sm:flex-row justify-between items-center my-5 space-y-4 sm:space-y-0'>
 				<div className='flex items-center space-x-4'>
-					<button type="button" onClick={() => likePost()}>
+					<button type="button" onClick={() => likePost()} className='focus:outline-none'>
 						{!isLiked ? <BiLike size={24} /> : <BiSolidLike size={24} />}
 					</button>
-					<button type="button" onClick={() => dislikePost()}>
+					<button type="button" onClick={() => dislikePost()} className='focus:outline-none'>
 						{!isDisliked ? <BiDislike size={24} /> : <BiSolidDislike size={24} />}
 					</button>
-					<button type='button' className='flex flex-row space-x-2' onClick={() => setShowCommentSection(true)}>
+					<button type='button' className='flex flex-row items-center space-x-2 focus:outline-none' onClick={() => setShowCommentSection(true)}>
 						<MdOutlineInsertComment size={24} />
 						<p>{memoizedCommentsData?.count}</p>
 					</button>
 				</div>
 				<div className='flex items-center space-x-4'>
-					<button type='button' onClick={() => bookmarkPost()}>
+					<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none'>
 						{isBookmarked ? <MdBookmarkAdded size={24} /> : <MdOutlineBookmarkAdd size={24} />}
 					</button>
-					<button type='button' onClick={speak}>
+					<button type='button' onClick={speak} className='focus:outline-none'>
 						{!speechStatus ? <CiPlay1 size={23} /> : <CiPause1 size={23} />}
 					</button>
 				</div>
 			</div>
-			<p>{memoizedPostData?.content}</p>
-			{showCommentSection && <div className='fixed top-0 right-0 pt-10 h-screen overflow-y-auto bg-slate-100 drop-shadow-2xl'>
-				<CommentSection comments={memoizedCommentsData} onClose={() => setShowCommentSection(false)} username={memoizedUserData?.username} postId={postData?.id} />
-			</div>}
+			<div className='prose max-w-none'>
+				<p>{memoizedPostData?.content}</p>
+			</div>
+			{showCommentSection && (
+				<div className='fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4'>
+					<div className='bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto'>
+						<CommentSection
+							comments={memoizedCommentsData}
+							onClose={() => setShowCommentSection(false)}
+							username={memoizedUserData?.username}
+							postId={postData?.id}
+						/>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

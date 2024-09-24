@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useMutation, useQuery, useQueryClient } from "react-query"
+import type { ItemType } from "../../interfaces";
 
 export const useReactions = (server_url: string, post_id: number, token: string) => {
 	return useQuery({
@@ -17,7 +18,7 @@ export const useReactions = (server_url: string, post_id: number, token: string)
 }
 
 export const useLikePost = (server_url: string, post_id: number, token: string) => {
-	const queryClient = useQueryClient()
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: () => {
@@ -25,18 +26,21 @@ export const useLikePost = (server_url: string, post_id: number, token: string) 
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
-			})
+			});
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["likesanddislikes", post_id]
-			})
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["getPosts"]
+			});
 		}
-	})
-}
+	});
+};
 
 export const useDisLikePost = (server_url: string, post_id: number, token: string) => {
-	const queryClient = useQueryClient()
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: () => {
@@ -44,12 +48,15 @@ export const useDisLikePost = (server_url: string, post_id: number, token: strin
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
-			})
+			});
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["likesanddislikes", post_id]
-			})
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["getPosts"]
+			});
 		}
-	})
-}
+	});
+};

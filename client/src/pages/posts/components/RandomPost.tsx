@@ -6,16 +6,24 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
 
 	return (
-		<a href={`/@${postData[0]?.user.username}/${postData[0].slug}`} className='my-5'>
-			<div className='flex flex-row my-10 border-slate-50 border-2 p-2 shadow-2xl h-144'>
-				{postData[0].featuredImage_url && <img src={getImageUrl(postData[0].featuredImage_url)} alt="" width={800} height={200} className="object-contain" />}
-				<div className='ml-10'>
-					<h1 className='font-semibold text-2xl'>{postData[0].title}</h1>
-					<p>{postData[0].description}</p>
-					<br />
-					<div className='flex flex-row'>
-						{postData[0].user.avatar_url && <img src={getAvatarUrl(postData[0].user.avatar_url)} alt="" width={50} height={10} style={{ borderRadius: 10, marginRight: 10 }} className="object-contain" />}
-						<p><span className="text-green-500">{postData[0].user.username}</span> <br /> {formatDate(postData[0].created_at)} - 12 min read</p>
+		<a href={`/@${postData[0]?.user.username}/${postData[0].slug}`} className='my-3 sm:my-4 md:my-5'>
+			<div className='flex flex-col md:flex-row my-4 sm:my-6 md:my-8 lg:my-10 border-slate-50 border-2 p-2 shadow-2xl min-h-[12rem] sm:min-h-[14rem] md:min-h-[16rem] md:h-auto lg:h-144'>
+				{postData[0].featuredImage_url && (
+					<div className="w-full md:w-1/2 mb-3 sm:mb-4 md:mb-0">
+						<img src={getImageUrl(postData[0].featuredImage_url)} alt="" className="w-full h-full object-cover" />
+					</div>
+				)}
+				<div className='md:ml-4 lg:ml-6 xl:ml-10 w-full md:w-1/2'>
+					<h1 className='font-semibold text-lg sm:text-xl md:text-2xl mb-2'>{postData[0].title}</h1>
+					<p className="mb-3 sm:mb-4 text-sm sm:text-base">{postData[0].description}</p>
+					<div className='flex flex-row items-center'>
+						{postData[0].user.avatar_url && (
+							<img src={getAvatarUrl(postData[0].user.avatar_url)} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-3 sm:mr-4 object-cover" />
+						)}
+						<div>
+							<p className="text-green-500 text-sm sm:text-base">{postData[0].user.username}</p>
+							<p className="text-xs sm:text-sm">{formatDate(postData[0].created_at)} - 12 min read</p>
+						</div>
 					</div>
 				</div>
 			</div>
