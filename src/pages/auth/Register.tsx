@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../utils/hooks/AuthContext";
 
 const Register = () => {
-	const { token } = useAuth()
+	const { token, setIsAuthenticated } = useAuth()
 	const navigate = useNavigate();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
@@ -23,6 +23,7 @@ const Register = () => {
 	const onSubmit: SubmitHandler<IFormInput> = (data) => {
 		handleRegister(data, {
 			onSuccess: () => {
+				setIsAuthenticated(true);
 				navigate("/");
 				console.log("Registration successful");
 			},

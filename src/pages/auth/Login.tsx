@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 const Login = () => {
 	const navigate = useNavigate();
-	const { token } = useAuth();
+	const { token, setIsAuthenticated } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
 	useEffect(() => {
@@ -27,6 +27,7 @@ const Login = () => {
 			{
 				onSuccess: (response) => {
 					if (response.refresh_token) {
+						setIsAuthenticated(true);
 						navigate('/');
 					} else {
 						console.error("No refresh token received");

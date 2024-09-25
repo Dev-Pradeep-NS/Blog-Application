@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import type { ItemType } from "../../../interfaces";
@@ -6,7 +7,7 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
 
 	return (
-		<a href={`/@${postData[0]?.user.username}/${postData[0].slug}`} className='my-3 sm:my-4 md:my-5'>
+		<Link to={`/@${postData[0]?.user.username}/${postData[0].slug}`} className='my-3 sm:my-4 md:my-5'>
 			<div className='flex flex-col md:flex-row my-4 sm:my-6 md:my-8 lg:my-10 border-slate-50 border-2 p-2 shadow-2xl min-h-[12rem] sm:min-h-[14rem] md:min-h-[16rem] md:h-auto lg:h-144'>
 				{postData[0].featuredImage_url && (
 					<div className="w-full md:w-1/2 mb-3 sm:mb-4 md:mb-0">
@@ -27,7 +28,7 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 					</div>
 				</div>
 			</div>
-		</a>
+		</Link>
 	)
 }
 export default RandomPost;

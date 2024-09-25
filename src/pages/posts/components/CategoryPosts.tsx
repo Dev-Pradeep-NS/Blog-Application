@@ -2,10 +2,9 @@ import { useDisLikePost, useLikePost } from "../../../utils/hooks/useReactions";
 import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import { SocialIcon } from "react-social-icons";
-import type { ItemType, Follower, User, Reaction, Bookmark } from "../../../interfaces";
+import type { ItemType, Reaction, Bookmark } from "../../../interfaces";
 import { useBookmarkPost, useBookmarks } from "../../../utils/hooks/useBookmarks";
 import { useAuth } from "../../../utils/hooks/AuthContext";
-import { useFollowerStore, usePostStore, useUserStore } from "../../../store";
 
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
@@ -16,6 +15,7 @@ import { MdBookmarkAdded } from "react-icons/md";
 import { useEffect, useMemo, useState } from "react";
 import { usePost } from "../../../utils/hooks/usePosts";
 import { useUserDetails, useUserFollowers } from "../../../utils/hooks/useUserdetails";
+import { Link } from "react-router-dom";
 
 const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCount, isBookmarked }: { id: number, isLiked: boolean, isDisliked: boolean, commentCount: number, likeCount: number, dislikeCount: number, isBookmarked: boolean }) => {
 	const { token } = useAuth();
@@ -143,9 +143,9 @@ const CategoryPosts = () => {
 												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
 											</div>
 											{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="" className='h-36 sm:h-48 lg:h-60 w-full object-cover mb-4' />}
-											<a href={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
+											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
 												<h1 className='font-semibold text-base mb-2'>{item.title}</h1>
-											</a>
+											</Link>
 											<p className='mb-4'>{item.description}</p>
 											<PostItem
 												id={item.id}

@@ -7,7 +7,8 @@ const AuthContext = createContext({
 	token: '',
 	isAuthenticated: false,
 	refreshToken: () => { },
-	logout: () => { }
+	logout: () => { },
+	setIsAuthenticated: (value: boolean) => { }
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -17,7 +18,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	const { mutate: getToken } = useGetAccessToken(server_url);
 	const { mutate: logoutMutation } = useLogout(server_url);
 	const navigate = useNavigate();
-	const location = useLocation();
 
 	const refreshToken = useCallback(() => {
 		getToken(undefined, {
@@ -26,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 					setToken(response.access_token);
 					setIsAuthenticated(true);
 				} else {
+					console.log("there")
 					setIsAuthenticated(false);
 				}
 			},
@@ -56,11 +57,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	}, [isAuthenticated, refreshToken]);
 
 	return (
-		<AuthContext.Provider value={{ token, isAuthenticated, refreshToken, logout }}>
+		<AuthContext.Provider value={{ token, isAuthenticated, refreshToken, logout, setIsAuthenticated }}>
 			{children}
 		</AuthContext.Provider>
 	);
 };
+
 export const useAuth = () => {
 	return useContext(AuthContext);
 };

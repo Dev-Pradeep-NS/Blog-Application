@@ -20,14 +20,10 @@ function App() {
 						<Routes>
 							<Route path="/login" element={<Login />} />
 							<Route path="/register" element={<Register />} />
-							<Route path="/" element={<Posts />} />
-							<Route path="/:username/:slug" element={<ViewPost />} />
-							<Route path="/latest" element={<LatestPosts />} />
-							<Route path="/new-story" element={
-								<PrivateRoute>
-									<PostForm />
-								</PrivateRoute>
-							} />
+							<Route path="/:username/:slug" element={<PrivateRoute><ViewPost /></PrivateRoute>} />
+							<Route path="/latest" element={<PrivateRoute><LatestPosts /></PrivateRoute>} />
+							<Route path="/new-story" element={<PrivateRoute><PostForm /></PrivateRoute>} />
+							<Route path="/" element={<PrivateRoute><Posts /></PrivateRoute>} />
 						</Routes>
 					</div>
 				</AuthProvider>

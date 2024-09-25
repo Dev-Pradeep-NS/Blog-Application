@@ -2,6 +2,7 @@ import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import { SocialIcon } from "react-social-icons";
 import type { ItemType, Follower, User } from "../../../interfaces";
+import { Link } from "react-router-dom";
 
 const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user: User, followers: Follower }) => {
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
@@ -13,7 +14,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 				<div className='flex flex-col mx-2 sm:mx-4 lg:ml-10'>
 					{postData?.map((item: ItemType) => {
 						return (
-							<a key={item.id} href={`/@${item.user.username}/${item.slug}`} className='my-2 sm:my-3'>
+							<Link key={item.id} to={`/@${item.user.username}/${item.slug}`} className='my-2 sm:my-3'>
 								<div key={item.id}>
 									<div className='mb-3 sm:mb-5 mr-2 sm:mr-5 flex flex-col sm:flex-row justify-between'>
 										<div>
@@ -29,7 +30,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 									</div>
 									<hr />
 								</div>
-							</a>
+							</Link>
 						)
 					})}
 				</div>

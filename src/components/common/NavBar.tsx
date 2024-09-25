@@ -1,5 +1,5 @@
 import { useAuth } from '../../utils/hooks/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLogout } from '../../utils/hooks/useAuth';
 import { useState } from 'react';
 
@@ -18,9 +18,9 @@ const NavBar = () => {
 			<div className="flex flex-row items-center w-full md:w-auto justify-between md:justify-start">
 				<img src='/pB.png' alt="Logo" className="h-16 w-16 md:h-24 md:w-24" />
 				<div className="hidden md:flex md:flex-row items-center space-x-4">
-					<a href='/latest' className='cursor-pointer'>LATEST</a>
-					<a href='/trending' className='cursor-pointer'>TRENDING</a>
-					<a href='/contact-us' className='cursor-pointer'>CONTACT US</a>
+					<Link to='/latest' className='cursor-pointer'>LATEST</Link>
+					<Link to='/trending' className='cursor-pointer'>TRENDING</Link>
+					<Link to='/contact-us' className='cursor-pointer'>CONTACT US</Link>
 				</div>
 				<button className="md:hidden" onClick={toggleMenu} type='button'>
 					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="img">
@@ -57,9 +57,9 @@ const NavBar = () => {
 					</div>
 					<nav className="flex-grow">
 						<ul className="py-4 space-y-2">
-							<li><a href="/latest" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">LATEST</a></li>
-							<li><a href="/trending" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">TRENDING</a></li>
-							<li><a href="/contact-us" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">CONTACT US</a></li>
+							<li><Link to="/latest" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">LATEST</Link></li>
+							<li><Link to="/trending" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">TRENDING</Link></li>
+							<li><Link to="/contact-us" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">CONTACT US</Link></li>
 						</ul>
 					</nav>
 					<div className="p-4 border-t">

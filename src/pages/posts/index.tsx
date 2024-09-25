@@ -6,16 +6,11 @@ import LatestPosts from './components/LatestPosts';
 import { usePost } from '../../utils/hooks/usePosts';
 import { useUserDetails, useUserFollowers } from '../../utils/hooks/useUserdetails';
 import { useAuth } from '../../utils/hooks/AuthContext';
-import CategoryPosts from './components/CategoryPosts';
-import { useFollowerStore, usePostStore, useUserStore } from '../../store';
 
 const PostPage = () => {
 	const { token } = useAuth();
 	const [isReady, setIsReady] = useState(false);
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
-	const { setUserData } = useUserStore();
-	const { setFollowerData } = useFollowerStore();
-
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
 	const user_id = userData?.id ?? 0;
@@ -30,14 +25,6 @@ const PostPage = () => {
 	const memoizedPostList = useMemo(() => Array.isArray(postData) ? postData : [], [postData]);
 	const memoizedUserData = useMemo(() => userData, [userData]);
 	const memoizedFollowers = useMemo(() => followers, [followers]);
-
-	useEffect(() => {
-		if (memoizedUserData) {
-			setUserData(memoizedUserData);
-		} if (memoizedFollowers) {
-			setFollowerData(memoizedFollowers)
-		}
-	}, [memoizedUserData, setUserData, setFollowerData, memoizedFollowers]);
 
 	if (!token) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading access token...</div>;
 	if (!isReady) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading data...</div>;
@@ -56,7 +43,7 @@ const PostPage = () => {
 				<RandomPost postData={memoizedPostList} />
 				<Posts postData={memoizedPostList} length={3} />
 				<h1 className='mt-3 sm:mt-5 font-light text-lg sm:text-xl md:text-2xl'>For Writers and Editors</h1>
-				<hr className="my-2 sm:my-4" />
+				<hr className="sm:my-4" />
 				<Posts postData={memoizedPostList} length={memoizedPostList.length} />
 				<h1 className='mt-6 sm:mt-8 md:mt-10 font-light text-lg sm:text-xl md:text-2xl'>Latest</h1>
 				<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />
