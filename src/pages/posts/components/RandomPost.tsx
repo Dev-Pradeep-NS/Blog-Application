@@ -18,9 +18,7 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 					<h1 className='font-semibold text-lg sm:text-xl md:text-2xl mb-2'>{postData[0].title}</h1>
 					<p className="mb-3 sm:mb-4 text-sm sm:text-base">{postData[0].description}</p>
 					<div className='flex flex-row items-center'>
-						{postData[0].user.avatar_url && (
-							<img src={getAvatarUrl(postData[0].user.avatar_url)} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-3 sm:mr-4 object-cover" />
-						)}
+						<img src={postData[0].user.avatar_url ? getAvatarUrl(postData[0].user.avatar_url) : '/logo.png'} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-3 sm:mr-4 object-cover" />
 						<div>
 							<p className="text-green-500 text-sm sm:text-base">{postData[0].user.username}</p>
 							<p className="text-xs sm:text-sm">{formatDate(postData[0].created_at)} - 12 min read</p>

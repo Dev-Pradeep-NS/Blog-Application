@@ -5,7 +5,7 @@ export const useBookmarks = (server_url: string, token: string) => {
 	return useQuery({
 		queryKey: ["bookmarks"],
 		queryFn: async () => {
-			const { data } = await axios.get(`${server_url}/users/bookmarks`, {
+			const { data } = await axios.get(`${server_url}/users/post/bookmarks`, {
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}

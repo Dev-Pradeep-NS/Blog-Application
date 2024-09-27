@@ -6,10 +6,12 @@ import LatestPosts from './components/LatestPosts';
 import { usePost } from '../../utils/hooks/usePosts';
 import { useUserDetails, useUserFollowers } from '../../utils/hooks/useUserdetails';
 import { useAuth } from '../../utils/hooks/AuthContext';
+import { useUserStore } from '../../store';
 
 const PostPage = () => {
 	const { token } = useAuth();
 	const [isReady, setIsReady] = useState(false);
+	const { setUserData } = useUserStore()
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
@@ -21,6 +23,11 @@ const PostPage = () => {
 			setIsReady(true);
 		}
 	}, [token]);
+
+	useEffect(() => {
+		if (userData)
+			setUserData(userData)
+	}, [userData, setUserData])
 
 	const memoizedPostList = useMemo(() => Array.isArray(postData) ? postData : [], [postData]);
 	const memoizedUserData = useMemo(() => userData, [userData]);
@@ -43,7 +50,7 @@ const PostPage = () => {
 				<RandomPost postData={memoizedPostList} />
 				<Posts postData={memoizedPostList} length={3} />
 				<h1 className='mt-3 sm:mt-5 font-light text-lg sm:text-xl md:text-2xl'>For Writers and Editors</h1>
-				<hr className="sm:my-4" />
+				<hr className="sm:my-2" />
 				<Posts postData={memoizedPostList} length={memoizedPostList.length} />
 				<h1 className='mt-6 sm:mt-8 md:mt-10 font-light text-lg sm:text-xl md:text-2xl'>Latest</h1>
 				<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />

@@ -16,6 +16,7 @@ interface ItemType {
 		username: string,
 		email: string,
 		bio: string,
+		created_at: string
 	},
 	created_at: string,
 	featuredImage_url: string,
@@ -34,11 +35,18 @@ interface PostData {
 interface User {
 	id: number,
 	username: string,
-	avatar_url: string
+	email: string,
+	bio: string,
+	avatar_url: string,
+	created_at: string
 }
 
 interface Follower {
-	followers: number
+	followers: User[]
+}
+
+interface Following {
+	following: User[]
 }
 
 interface Reaction {
@@ -87,6 +95,12 @@ interface IFormInput {
 	confirm_password: string;
 }
 
+interface IResetPasswordInput {
+	email: string;
+	oldPassword: string;
+	newPassword: string;
+}
+
 export type {
-	ItemType, User, Follower, Reaction, Bookmark, Comments, IFormInput, PostData
+	ItemType, User, Follower, Following, Reaction, Bookmark, Comments, IFormInput, PostData, IResetPasswordInput
 }

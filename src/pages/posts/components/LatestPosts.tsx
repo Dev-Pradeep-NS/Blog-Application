@@ -22,7 +22,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 											<p className='text-xs sm:text-sm'>{item.description}</p>
 											<br />
 											<div className='flex flex-row items-center'>
-												{item.user.avatar_url && <img src={getAvatarUrl(item.user.avatar_url)} alt="" className='w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3' />}
+												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" className='w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3' />
 												<p className='text-xs sm:text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
 											</div>
 										</div>
@@ -38,12 +38,12 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 
 			<div className='w-full lg:w-1/3 mt-4 lg:mt-0 lg:ml-10 px-2 sm:px-4 lg:px-0'>
 				<div className='flex flex-row items-center'>
-					{user.avatar_url && <img src={getAvatarUrl(user?.avatar_url)} alt="" className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3 object-contain" />}
+					<img src={user.avatar_url ? getAvatarUrl(user.avatar_url) : '/logo.png'} alt="" className='w-8 h-8 sm:w-12 sm:h-12 rounded-lg mr-2 sm:mr-3' />
 					<p className='text-xs sm:text-sm'>The {user?.username} Blog</p>
 				</div>
 				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>The official Pradeep Blog.</p>
 				<p className='text-xs sm:text-sm mb-1 sm:mb-2 text-green-500'>More information</p>
-				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>Followers - {followers?.followers ? followers?.followers : 0}</p>
+				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>Followers - {followers?.followers ? followers?.followers.length : 0}</p>
 				<p className='text-xs sm:text-sm mb-1 sm:mb-2'>ELSEWHERE</p>
 				<div className='flex flex-row'>
 					<SocialIcon url='www.facebook.com' style={{ height: 20, width: 20, margin: '0 1px' }} />

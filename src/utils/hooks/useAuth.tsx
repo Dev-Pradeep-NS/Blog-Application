@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useMutation } from "react-query";
-import type { IFormInput } from "../../interfaces";
+import { useMutation, useQuery } from "react-query";
+import type { IFormInput, IResetPasswordInput } from "../../interfaces";
 
 export const useRegister = (server_url: string) => {
 	return useMutation({
@@ -8,7 +8,7 @@ export const useRegister = (server_url: string) => {
 			const response = await axios.post(
 				`${server_url}/register`,
 				{
-					username: data.username,
+					username: data.username.split(' ').join(''),
 					email: data.email,
 					password: data.password,
 				},
@@ -56,4 +56,30 @@ export const useLogout = (server_url: string) => {
 			return response
 		}
 	})
+};
+
+export const useVerifyEmail = (server_url: string, email: string) => {
+	return useQuery({
+		queryFn: async () => {
+			const response = await axios.get(`${server_url}/verifyemail/${email}`,
+				{
+				}
+			)
+			return response
+		},
+		enabled: !!email && email.length > 0
+	})
+}
+
+export const useResetPassword = (server_url: string) => {
+	return useMutation<void, Error, IResetPasswordInput>({
+		mutationFn: async (data: IResetPasswordInput) => {
+			const response = await axios.put(`${server_url}/reset-password`, {
+				email: data.email,
+				oldPassword: data.oldPassword,
+				newPassword: data.newPassword,
+			});
+			return response.data;
+		},
+	});
 };

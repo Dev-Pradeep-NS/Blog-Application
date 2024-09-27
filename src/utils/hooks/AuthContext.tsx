@@ -8,7 +8,8 @@ const AuthContext = createContext({
 	isAuthenticated: false,
 	refreshToken: () => { },
 	logout: () => { },
-	setIsAuthenticated: (value: boolean) => { }
+	setIsAuthenticated: (value: boolean) => { },
+	setToken: (value: string) => { }
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -57,12 +58,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	}, [isAuthenticated, refreshToken]);
 
 	return (
-		<AuthContext.Provider value={{ token, isAuthenticated, refreshToken, logout, setIsAuthenticated }}>
+		<AuthContext.Provider value={{ token, isAuthenticated, refreshToken, logout, setIsAuthenticated, setToken }}>
 			{children}
 		</AuthContext.Provider>
 	);
 };
-
 export const useAuth = () => {
 	return useContext(AuthContext);
 };

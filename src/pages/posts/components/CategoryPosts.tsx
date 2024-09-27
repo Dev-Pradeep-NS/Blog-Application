@@ -15,7 +15,7 @@ import { MdBookmarkAdded } from "react-icons/md";
 import { useEffect, useMemo, useState } from "react";
 import { usePost } from "../../../utils/hooks/usePosts";
 import { useUserDetails, useUserFollowers } from "../../../utils/hooks/useUserdetails";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCount, isBookmarked }: { id: number, isLiked: boolean, isDisliked: boolean, commentCount: number, likeCount: number, dislikeCount: number, isBookmarked: boolean }) => {
 	const { token } = useAuth();
@@ -51,6 +51,8 @@ const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCou
 const CategoryPosts = () => {
 	const { token } = useAuth();
 	const [isReady, setIsReady] = useState<boolean>(false);
+	const { category } = useParams();
+	const navigate = useNavigate();
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
@@ -67,6 +69,12 @@ const CategoryPosts = () => {
 		}
 	}, [token]);
 
+	useEffect(() => {
+		if (category) {
+			setSelectedCategory(category);
+		}
+	}, [category]);
+
 	const memoizedPostList = useMemo(() => Array.isArray(postData) ? postData : [], [postData]);
 	const memoizedUserData = useMemo(() => user, [user]);
 	const memoizedFollowers = useMemo(() => followers, [followers]);
@@ -82,8 +90,8 @@ const CategoryPosts = () => {
 	}, [memoizedPostList, selectedCategory]);
 
 	const handleCategoryClick = (category: string) => {
-		setSelectedCategory(category);
-	}
+		navigate(`/category/${category}`);
+	};
 
 	if (!token) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading access token...</div>;
 	if (!isReady) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading data...</div>;
@@ -95,31 +103,31 @@ const CategoryPosts = () => {
 	if (!memoizedFollowers) return <div className="p-2 sm:p-4 text-sm sm:text-base">Followers data not available.</div>;
 
 	return (
-		<div>
+		<div className="mt-5">
 			<div className="flex flex-wrap">
 				<button onClick={() => handleCategoryClick('latest')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Latest
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'latest' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'latest' ? '100%' : '0%' }} />
 				</button>
 				<button onClick={() => handleCategoryClick('technology')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Technology
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'technology' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'technology' ? '100%' : '0%' }} />
 				</button>
 				<button onClick={() => handleCategoryClick('lifestyle')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Lifestyle
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'lifestyle' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'lifestyle' ? '100%' : '0%' }} />
 				</button>
 				<button onClick={() => handleCategoryClick('travel')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Travel
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'travel' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'travel' ? '100%' : '0%' }} />
 				</button>
 				<button onClick={() => handleCategoryClick('food')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Food
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'food' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'food' ? '100%' : '0%' }} />
 				</button>
 				<button onClick={() => handleCategoryClick('other')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
 					Other
-					<div className="h-1 bg-blue-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'other' ? '100%' : '0%' }} />
+					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'other' ? '100%' : '0%' }} />
 				</button>
 			</div>
 			<div className='flex flex-col lg:flex-row'>
@@ -139,10 +147,10 @@ const CategoryPosts = () => {
 									<div key={item.id} className='my-3'>
 										<div className='mb-5 mr-5 flex flex-col'>
 											<div className='flex flex-row my-5 items-center'>
-												{item.user.avatar_url && <img src={getAvatarUrl(item.user.avatar_url)} alt="" width={50} height={50} className="rounded-full mr-4" />}
+												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" width={50} height={50} className="rounded-full mr-4" />
 												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
 											</div>
-											{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="" className='h-36 sm:h-48 lg:h-60 w-full object-cover mb-4' />}
+											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/logo.png'} alt="" className='h-36 sm:h-48 lg:h-60 w-full object-cover mb-4' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
 												<h1 className='font-semibold text-base mb-2'>{item.title}</h1>
 											</Link>
@@ -162,18 +170,18 @@ const CategoryPosts = () => {
 								)
 							})
 						) : (
-							<div className="p-4 text-center text-gray-500">No posts available for this category.</div>
+							<div className="p-4 text-center text-gray-500">No posts available for {category} category.</div>
 						)}
 					</div>
 				</div>
 				<div className='w-full lg:w-1/3 mt-8 lg:mt-0 lg:ml-8 px-4'>
 					<div className='flex flex-row items-center mb-4'>
-						{memoizedUserData?.avatar_url && <img src={getAvatarUrl(memoizedUserData?.avatar_url)} alt="" width={50} height={50} className="rounded-full mr-4" />}
+						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/logo.png'} alt="" width={50} height={50} className="rounded-full mr-4" />
 						<p className='text-sm font-semibold'>The {memoizedUserData?.username} Blog</p>
 					</div>
 					<p className='text-sm mb-2'>The official Pradeep Blog.</p>
 					<p className='text-sm mb-2 text-green-500 cursor-pointer hover:underline'>More information</p>
-					<p className='mb-2'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers : 0}</p>
+					<p className='mb-2'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
 					<p className='mb-2 font-semibold'>ELSEWHERE</p>
 					<div className='flex space-x-2'>
 						<SocialIcon url='https://www.facebook.com' style={{ height: 25, width: 25 }} />

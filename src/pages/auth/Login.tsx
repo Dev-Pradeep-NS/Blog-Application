@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 const Login = () => {
 	const navigate = useNavigate();
-	const { token, setIsAuthenticated } = useAuth();
+	const { token, setIsAuthenticated, setToken } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
 	useEffect(() => {
@@ -28,6 +28,7 @@ const Login = () => {
 				onSuccess: (response) => {
 					if (response.refresh_token) {
 						setIsAuthenticated(true);
+						setToken(response.access_token);
 						navigate('/');
 					} else {
 						console.error("No refresh token received");
@@ -73,6 +74,11 @@ const Login = () => {
 								className="w-full px-3 sm:px-4 py-2 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
 							/>
 							{errors.password && <span className="text-xs italic text-red-500 mt-1">{errors.password.message}</span>}
+						</div>
+						<div className="flex justify-end">
+							<Link to="/forgot-password" className="text-xs sm:text-sm text-blue-600 hover:text-blue-500">
+								Forgot Password?
+							</Link>
 						</div>
 						<button
 							type="submit"
