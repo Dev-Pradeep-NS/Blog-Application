@@ -18,7 +18,14 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 					<h1 className='font-semibold text-lg sm:text-xl md:text-2xl mb-2'>{postData[0].title}</h1>
 					<p className="mb-3 sm:mb-4 text-sm sm:text-base">{postData[0].description}</p>
 					<div className='flex flex-row items-center'>
-						<img src={postData[0].user.avatar_url ? getAvatarUrl(postData[0].user.avatar_url) : '/logo.png'} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-3 sm:mr-4 object-cover" />
+						<Link to={`/@${postData[0].user.username}`} className="relative group">
+							<img src={postData[0].user.avatar_url ? getAvatarUrl(postData[0].user.avatar_url) : '/logo.png'} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-3 sm:mr-4 object-cover" />
+							<div className="hidden group-hover:block absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-white text-gray-900 text-sm rounded-lg p-4 shadow-xl whitespace-normal w-48 max-w-xs">
+								<p className="font-semibold text-base text-center">{postData[0].user.username}</p>
+								<p className="text-gray-500 text-xs text-center">{formatDate(postData[0].user.created_at)}</p>
+								<p className="text-gray-700 mt-1 text-center overflow-ellipsis overflow-hidden max-h-16">{postData[0].user.bio || "No bio available"}</p>
+							</div>
+						</Link>
 						<div>
 							<p className="text-green-500 text-sm sm:text-base">{postData[0].user.username}</p>
 							<p className="text-xs sm:text-sm">{formatDate(postData[0].created_at)} - 12 min read</p>

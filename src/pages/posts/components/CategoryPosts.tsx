@@ -146,10 +146,15 @@ const CategoryPosts = () => {
 								return (
 									<div key={item.id} className='my-3'>
 										<div className='mb-5 mr-5 flex flex-col'>
-											<div className='flex flex-row my-5 items-center'>
+											<Link to={`/@${item.user.username}`} className='flex flex-row my-5 items-center relative group'>
 												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" width={50} height={50} className="rounded-full mr-4" />
+												<div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-white text-gray-900 text-sm rounded-lg p-4 shadow-xl whitespace-normal w-48 max-w-xs z-10">
+													<p className="font-semibold text-base text-center">{item.user.username}</p>
+													<p className="text-gray-500 text-xs text-center">{formatDate(item.user.created_at)}</p>
+													<p className="text-gray-700 mt-1 text-center overflow-ellipsis overflow-hidden max-h-16">{item.user.bio || "No bio available"}</p>
+												</div>
 												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
-											</div>
+											</Link>
 											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/logo.png'} alt="" className='h-36 sm:h-48 lg:h-60 w-full object-cover mb-4' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
 												<h1 className='font-semibold text-base mb-2'>{item.title}</h1>
