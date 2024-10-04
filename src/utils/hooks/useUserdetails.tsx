@@ -135,3 +135,17 @@ export const useUpdateProfile = (server_url: string, token: string, user_id: num
 		}
 	})
 }
+
+export const useGetUserandEmail = (server_url: string, token: string) => {
+	return useQuery({
+		queryKey: ["getcontacts"],
+		queryFn: async () => {
+			const { data } = await axios.get(`${server_url}/users-emails`, {
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
+			});
+			return data
+		}
+	})
+}

@@ -4,6 +4,15 @@ import { useAuth } from "../../../utils/hooks/AuthContext";
 import { useNavigate } from "react-router-dom";
 import '../index.css'
 import { useCreatePost } from "../../../utils/hooks/usePosts";
+import ReactQuill, { Quill } from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
+import "react-quill/dist/quill.snow.css";
+
+hljs.configure({
+	languages: ['javascript', 'python', 'ruby', 'go', 'typescript', 'java', 'cpp', 'csharp'],
+});
 
 const AddPost: React.FC = () => {
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
@@ -41,8 +50,8 @@ const AddPost: React.FC = () => {
 		setDescription(event.target.value);
 	};
 
-	const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setContent(event.target.value);
+	const handleContentChange = (value: string) => {
+		setContent(value);
 	};
 
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -88,38 +97,38 @@ const AddPost: React.FC = () => {
 	};
 
 	return (
-		<div className="mb-10 scrollbar-hide">
-			<div className="flex justify-between items-center py-2 sm:py-4 px-4 sm:px-6 mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-80 mb-3 sm:mb-5 sticky top-0 z-10">
-				<button type="button" onClick={() => navigate("/")} >
-					<img src='/pB.png' alt="Logo" className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-28 lg:w-28" />
-				</button>
-				<div className="flex items-center space-x-2 sm:space-x-4">
-					<button
-						type="button"
-						className={`bg-gray-200 text-gray-700 px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium ${!isFormValid && 'opacity-50 cursor-not-allowed'}`}
-						onClick={handleSaveDraft}
-						disabled={!isFormValid}
-					>
-						Save Draft
+		<div className="min-h-screen bg-gray-100 font-cas">
+			<div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+				<div className="flex flex-col sm:flex-row justify-between items-center mb-6 bg-white rounded-lg border px-5 py-1">
+					<button type="button" onClick={() => navigate("/posts")} className="text-gray-600 hover:text-gray-900 mb-4 sm:mb-0">
+						<img src='/Logo.png' alt="Logo" className="h-10 w-10" />
 					</button>
-					<button
-						type="button"
-						className={`bg-green-100 text-green-600 px-2 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium ${!isFormValid && 'opacity-50 cursor-not-allowed'}`}
-						onClick={handlePublish}
-						disabled={!isFormValid}
-					>
-						Publish
-					</button>
+					<div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
+						<button
+							type="button"
+							className={`w-full sm:w-auto bg-white text-gray-700 px-3 py-1.5 rounded-full text-xs font-medium shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${!isFormValid && 'opacity-50 cursor-not-allowed'}`}
+							onClick={handleSaveDraft}
+							disabled={!isFormValid}
+						>
+							Save Draft
+						</button>
+						<button
+							type="button"
+							className={`w-full sm:w-auto bg-green-600 text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${!isFormValid && 'opacity-50 cursor-not-allowed'}`}
+							onClick={handlePublish}
+							disabled={!isFormValid}
+						>
+							Publish
+						</button>
+					</div>
 				</div>
-			</div>
-			<div className="h-auto pb-5 flex justify-center px-4 sm:px-6">
-				<div className="bg-white shadow-md rounded-lg w-full max-w-xl sm:max-w-2xl md:max-w-3xl">
-					<form onSubmit={handleSubmit} className="p-4 sm:p-6 max-h-[calc(95vh-120px)] overflow-y-auto scrollbar-hide">
+				<div className="bg-white shadow-lg rounded-lg overflow-hidden">
+					<form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-3 sm:space-y-4">
 						<input
 							type="text"
 							value={title}
 							onChange={handleTitleChange}
-							className="w-full text-lg sm:text-xl md:text-2xl font-bold focus:outline-none placeholder-gray-500 text-gray-900 bg-transparent border border-gray-300 rounded-md p-2"
+							className="w-full text-lg sm:text-base font-bold focus:outline-none placeholder-gray-400 text-gray-900 border-2 border-gray-300 rounded-md p-2"
 							placeholder="Title"
 							required
 						/>
@@ -127,114 +136,110 @@ const AddPost: React.FC = () => {
 						<textarea
 							value={description}
 							onChange={handleDescriptionChange}
-							className="w-full mt-4 sm:mt-6 text-base sm:text-lg md:text-xl focus:outline-none placeholder-gray-500 text-gray-900 bg-transparent border border-gray-300 rounded-md p-2"
+							className="w-full text-base sm:text-sm focus:outline-none placeholder-gray-400 text-gray-700 resize-none border-2 border-gray-300 rounded-md p-2"
 							placeholder="Write a brief description..."
-							rows={3}
+							rows={2}
 							required
 						/>
 
-						<textarea
+						<ReactQuill
 							value={content}
 							onChange={handleContentChange}
-							className="w-full mt-4 sm:mt-6 text-base sm:text-lg md:text-xl focus:outline-none placeholder-gray-500 text-gray-900 bg-transparent border border-gray-300 rounded-md p-2"
+							className="h-auto font-sans"
 							placeholder="Tell your story..."
-							rows={5}
-							required
+							modules={{
+								toolbar: [
+									['bold', 'italic', 'underline', 'strike', 'blockquote'],
+									[{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+									['link', 'image'],
+									['code-block'],
+									['clean']
+								],
+								syntax: true,
+								clipboard: {
+									matchVisual: false
+								}
+							}}
+							formats={[
+								'bold', 'italic', 'underline', 'strike', 'blockquote',
+								'list', 'bullet', 'indent',
+								'link', 'image',
+								'code-block'
+							]}
+							theme="snow"
+							style={{ minHeight: "200px" }}
 						/>
 
-						<select
-							value={category}
-							onChange={handleCategoryChange}
-							className="w-full mt-4 sm:mt-6 text-base sm:text-lg md:text-xl focus:outline-none placeholder-gray-500 text-gray-900 bg-transparent border border-gray-300 rounded-md p-2"
-							required
-						>
-							<option value="">Select Category</option>
-							<option value="technology">Technology</option>
-							<option value="lifestyle">Lifestyle</option>
-							<option value="travel">Travel</option>
-							<option value="food">Food</option>
-							<option value="other">Other</option>
-						</select>
-
-						<input
-							type="text"
-							value={tags}
-							onChange={handleTagsChange}
-							className="w-full mt-4 sm:mt-6 text-base sm:text-lg md:text-xl focus:outline-none placeholder-gray-500 text-gray-900 bg-transparent border border-gray-300 rounded-md p-2"
-							placeholder="Tags (comma-separated)"
-							required
-						/>
-
-						<div className="mt-4">
-							<label
-								htmlFor="file-upload"
-								className="block text-xs sm:text-sm font-medium text-gray-700"
+						<div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+							<select
+								value={category}
+								onChange={handleCategoryChange}
+								className="w-full sm:w-1/2 px-2 py-1.5 text-sm text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								required
 							>
-								Upload Featured Image
-							</label>
-							<div className="mt-1 flex justify-center px-4 sm:px-6 pt-3 sm:pt-5 pb-4 sm:pb-6 border-2 border-gray-300 border-dashed rounded-md">
-								<div className="space-y-1 text-center">
-									<svg
-										className="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400"
-										stroke="currentColor"
-										fill="none"
-										viewBox="0 0 48 48"
-										aria-hidden="true"
-									>
-										<path
-											d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-											strokeWidth={2}
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
+								<option value="">Select Category</option>
+								<option value="technology">Technology</option>
+								<option value="lifestyle">Lifestyle</option>
+								<option value="travel">Travel</option>
+								<option value="food">Food</option>
+								<option value="other">Other</option>
+							</select>
 
-									{selectedFile ?
-										(
-											<div>
-												<img
-													src={URL.createObjectURL(selectedFile)}
-													alt="Preview"
-													className="mt-2 max-w-full h-auto"
-													style={{ maxHeight: '150px' }}
-												/>
-												<button
-													type="button"
-													onClick={() => {
-														setSelectedFile(null);
-														const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-														if (fileInput) {
-															fileInput.value = '';
-														}
-													}}
-													className="mt-2 px-2 sm:px-3 py-1 text-xs sm:text-sm text-white bg-red-500 rounded hover:bg-red-600"
+							<input
+								type="text"
+								value={tags}
+								onChange={handleTagsChange}
+								className="w-full sm:w-1/2 px-2 py-1.5 text-sm text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								placeholder="Tags (comma-separated)"
+								required
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="file-upload" className="block text-xs font-medium text-gray-700 mb-1">
+								Featured Image
+							</label>
+							<div className="mt-1 flex justify-center px-4 pt-4 pb-4 border-2 border-gray-300 border-dashed rounded-md">
+								<div className="space-y-1 text-center">
+									{selectedFile ? (
+										<div>
+											<img
+												src={URL.createObjectURL(selectedFile)}
+												alt="Preview"
+												className="mx-auto h-24 w-auto"
+											/>
+											<button
+												type="button"
+												onClick={() => {
+													setSelectedFile(null);
+													const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+													if (fileInput) {
+														fileInput.value = '';
+													}
+												}}
+												className="mt-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+											>
+												Remove
+											</button>
+										</div>
+									) : (
+										<>
+											<svg className="mx-auto h-10 w-10 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+												<path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+											</svg>
+											<div className="flex text-xs text-gray-600">
+												<label
+													htmlFor="file-upload"
+													className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
 												>
-													Remove
-												</button>
+													<span>Upload a file</span>
+													<input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageUpload} accept="image/*" />
+												</label>
+												<p className="pl-1">or drag and drop</p>
 											</div>
-										) :
-										(
-											<>
-												<div className="flex text-xs sm:text-sm text-gray-600">
-													<label
-														htmlFor="file-upload"
-														className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500"
-													>
-														<span>Upload a file</span>
-														<input
-															id="file-upload"
-															name="file-upload"
-															type="file"
-															className="sr-only"
-															onChange={handleImageUpload}
-															accept="image/*"
-														/>
-													</label>
-													<p className="pl-1">or drag and drop</p>
-												</div>
-												<p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-											</>
-										)}
+											<p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+										</>
+									)}
 								</div>
 							</div>
 						</div>

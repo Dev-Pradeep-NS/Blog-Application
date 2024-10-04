@@ -32,6 +32,34 @@ interface PostData {
 	image?: File;
 }
 
+interface PostDataForEmail {
+	title: string,
+	author: string,
+	description: string,
+	link: string
+}
+
+interface ContactData {
+	name: string,
+	email: string,
+	subject: string,
+	message: string
+}
+
+interface EmailPayload {
+	sender: {
+		email: string;
+		name: string;
+	};
+	to: Array<{
+		email: string;
+		name: string;
+	}>;
+	subject: string;
+	htmlContent: string;
+}
+
+
 interface User {
 	id: number,
 	username: string,
@@ -102,5 +130,5 @@ interface IResetPasswordInput {
 }
 
 export type {
-	ItemType, User, Follower, Following, Reaction, Bookmark, Comments, IFormInput, PostData, IResetPasswordInput
+	ItemType, User, Follower, Following, PostDataForEmail, Reaction, EmailPayload, Bookmark, Comments, IFormInput, PostData, IResetPasswordInput, ContactData
 }

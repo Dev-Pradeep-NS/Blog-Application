@@ -25,6 +25,7 @@ const PostPage = () => {
 	}, [token]);
 
 	useEffect(() => {
+		console.log(userData)
 		if (userData)
 			setUserData(userData)
 	}, [userData, setUserData])
@@ -36,23 +37,29 @@ const PostPage = () => {
 	if (!token) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading access token...</div>;
 	if (!isReady) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading data...</div>;
 
-	if (postsLoading || userLoading || followersLoading) return <div className="p-2 sm:p-4 text-sm sm:text-base">Loading...</div>;
+	if (postsLoading || userLoading || followersLoading)
+		return <div className='flex space-x-2 justify-center items-center bg-white h-screen dark:invert'>
+			<span className='sr-only'>Loading...</span>
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]' />
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]' />
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce' />
+		</div>;
+
 	if (postsError || userError || followersError) return <div className="p-2 sm:p-4 text-sm sm:text-base">An error has occurred.</div>;
 
 	if (!memoizedUserData) return <div className="p-2 sm:p-4 text-sm sm:text-base">User data not available.</div>;
 	if (!memoizedFollowers) return <div className="p-2 sm:p-4 text-sm sm:text-base">Followers data not available.</div>;
 
 	return (
-		<div className="container mx-auto font-cas mb-6 sm:mb-10 px-2 sm:px-4 md:px-6 lg:px-8">
+		<div className="container mx-auto mb-6 sm:mb-10 max-w-screen-lg">
 			<NavBar />
-			<hr className="my-2 sm:my-4" />
+			<hr className="sm:my-4" />
 			<div className="space-y-4 sm:space-y-8">
 				<RandomPost postData={memoizedPostList} />
 				<Posts postData={memoizedPostList} length={3} />
-				<h1 className='mt-3 sm:mt-5 font-light text-lg sm:text-xl md:text-2xl'>For Writers and Editors</h1>
-				<hr className="sm:my-2" />
+				<h1 className='pl-3 lg:pl-0 font-light text-lg sm:text-xl md:text-xl underline'>For Writers and Editors</h1>
 				<Posts postData={memoizedPostList} length={memoizedPostList.length} />
-				<h1 className='mt-6 sm:mt-8 md:mt-10 font-light text-lg sm:text-xl md:text-2xl'>Latest</h1>
+				<h1 className='pl-3 lg:pl-0 font-light text-lg sm:text-xl md:text-xl underline'>Latest</h1>
 				<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />
 			</div>
 		</div>

@@ -7,24 +7,25 @@ import { useEffect } from "react";
 import { useAuth } from "../../utils/hooks/AuthContext";
 
 const Register = () => {
-	const { token, setIsAuthenticated } = useAuth()
+	const { token, setIsAuthenticated, setToken } = useAuth()
 	const navigate = useNavigate();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
 
 	useEffect(() => {
 		if (token && token.length > 0) {
-			navigate('/');
+			navigate('/posts');
 		}
 	}, [token, navigate])
 
 	const { register, handleSubmit, watch, formState: { errors } } = useForm<IFormInput>();
 	const { mutate: handleRegister, isLoading, error } = useRegister(server_url);
 
-	const onSubmit: SubmitHandler<IFormInput> = (data) => {
+	const onSubmit: SubmitHandler<IFormInput> = async (data) => {
 		handleRegister(data, {
-			onSuccess: () => {
+			onSuccess: (response) => {
 				setIsAuthenticated(true);
-				navigate("/");
+				setToken(response.access_token);
+				navigate("/posts");
 				console.log("Registration successful");
 			},
 			onError: (error) => {
@@ -36,8 +37,14 @@ const Register = () => {
 	const password = watch("password");
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <div className='flex space-x-2 justify-center items-center bg-white h-screen dark:invert'>
+			<span className='sr-only'>Loading...</span>
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]' />
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]' />
+			<div className='h-8 w-8 bg-black rounded-full animate-bounce' />
+		</div>;
 	}
+
 	if (error) {
 		return <div>Error: {error.toString()}</div>;
 	}

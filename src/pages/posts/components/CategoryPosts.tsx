@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePost } from "../../../utils/hooks/usePosts";
 import { useUserDetails, useUserFollowers } from "../../../utils/hooks/useUserdetails";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import readingTime from "../../../utils/helpers/readingTime";
 
 const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCount, isBookmarked }: { id: number, isLiked: boolean, isDisliked: boolean, commentCount: number, likeCount: number, dislikeCount: number, isBookmarked: boolean }) => {
 	const { token } = useAuth();
@@ -25,23 +26,23 @@ const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCou
 	const { mutate: bookmarkPost } = useBookmarkPost(server_url, id, token)
 
 	return (
-		<div className='flex flex-col sm:flex-row justify-between items-center my-5 space-y-4 sm:space-y-0'>
+		<div className='flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0'>
 			<div className='flex items-center space-x-4'>
 				<button type="button" onClick={() => likePost()} className='focus:outline-none'>
-					{!isLiked ? <BiLike size={24} /> : <BiSolidLike size={24} />}
+					{!isLiked ? <BiLike size={16} /> : <BiSolidLike size={16} />}
 				</button>
 				<h1>{likeCount}</h1>
 				<button type="button" onClick={() => dislikePost()} className='focus:outline-none'>
-					{!isDisliked ? <BiDislike size={24} /> : <BiSolidDislike size={24} />}
+					{!isDisliked ? <BiDislike size={16} /> : <BiSolidDislike size={16} />}
 				</button>
 				<h1>{dislikeCount}</h1>
 			</div>
 			<div className='flex items-center space-x-4'>
 				<button type="button">
-					<h1>{commentCount} responses</h1>
+					<h1 className="text-sm">{commentCount} responses</h1>
 				</button>
 				<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none'>
-					{isBookmarked ? <MdBookmarkAdded size={24} /> : <MdOutlineBookmarkAdd size={24} />}
+					{isBookmarked ? <MdBookmarkAdded size={16} /> : <MdOutlineBookmarkAdd size={16} />}
 				</button>
 			</div>
 		</div>
@@ -80,8 +81,16 @@ const CategoryPosts = () => {
 	const memoizedFollowers = useMemo(() => followers, [followers]);
 
 	const filteredData = useMemo(() => {
+		const now = new Date();
+		const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+		startOfWeek.setHours(0, 0, 0, 0);
+
 		if (selectedCategory === 'latest') {
 			return memoizedPostList
+		}
+		if (selectedCategory === 'trending') {
+			console.log("here")
+			return memoizedPostList.filter(item => new Date(item.created_at) >= startOfWeek);
 		}
 		if (selectedCategory) {
 			return memoizedPostList.filter(item => item.category === selectedCategory);
@@ -103,37 +112,41 @@ const CategoryPosts = () => {
 	if (!memoizedFollowers) return <div className="p-2 sm:p-4 text-sm sm:text-base">Followers data not available.</div>;
 
 	return (
-		<div className="mt-5">
-			<div className="flex flex-wrap">
-				<button onClick={() => handleCategoryClick('latest')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+		<div className="mt-4">
+			<div className="flex flex-wrap font-semibold">
+				<button onClick={() => handleCategoryClick('latest')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Latest
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'latest' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'latest' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('technology')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+				<button onClick={() => handleCategoryClick('trending')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+					Trending
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'trending' ? '100%' : '0%' }} />
+				</button>
+				<button onClick={() => handleCategoryClick('technology')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Technology
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'technology' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'technology' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('lifestyle')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+				<button onClick={() => handleCategoryClick('lifestyle')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Lifestyle
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'lifestyle' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'lifestyle' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('travel')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+				<button onClick={() => handleCategoryClick('travel')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Travel
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'travel' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'travel' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('food')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+				<button onClick={() => handleCategoryClick('food')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Food
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'food' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'food' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('other')} type="button" className="mr-2 mb-2 p-2 cursor-pointer text-sm">
+				<button onClick={() => handleCategoryClick('other')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
 					Other
-					<div className="h-1 bg-gray-500 mt-1 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'other' ? '100%' : '0%' }} />
+					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'other' ? '100%' : '0%' }} />
 				</button>
 			</div>
 			<div className='flex flex-col lg:flex-row'>
 				<div className='w-full lg:w-2/3'>
 					<hr />
-					<div className='flex flex-col mx-4 lg:ml-10'>
+					<div className='flex flex-col mx-3 lg:ml-8 font-content'>
 						{filteredData && filteredData.length > 0 ? (
 							filteredData.map((item: ItemType) => {
 								const commentCount = item.Comments.filter(i => i.parent_id === null).length;
@@ -144,22 +157,22 @@ const CategoryPosts = () => {
 								const isBookmarked = memoizedBookmarkData?.some((bookmark: Bookmark) => bookmark.user_id === user?.id && bookmark.post_id === item.id)
 
 								return (
-									<div key={item.id} className='my-3'>
-										<div className='mb-5 mr-5 flex flex-col'>
-											<Link to={`/@${item.user.username}`} className='flex flex-row my-5 items-center relative group'>
-												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" width={50} height={50} className="rounded-full mr-4" />
-												<div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-white text-gray-900 text-sm rounded-lg p-4 shadow-xl whitespace-normal w-48 max-w-xs z-10">
-													<p className="font-semibold text-base text-center">{item.user.username}</p>
-													<p className="text-gray-500 text-xs text-center">{formatDate(item.user.created_at)}</p>
-													<p className="text-gray-700 mt-1 text-center overflow-ellipsis overflow-hidden max-h-16">{item.user.bio || "No bio available"}</p>
+									<div key={item.id} className='my-0'>
+										<div className='mb-4 mr-4 flex flex-col'>
+											<Link to={`/@${item.user.username}`} className='flex flex-row my-4 items-center relative group'>
+												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+												<div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-white text-gray-900 text-xs rounded-lg p-3 shadow-xl whitespace-normal w-40 max-w-xs z-10">
+													<p className="font-semibold text-sm text-center">{item.user.username}</p>
+													<p className="text-gray-500 text-xxs text-center">{formatDate(item.user.created_at)}</p>
+													<p className="text-gray-700 mt-1 text-center overflow-ellipsis overflow-hidden max-h-14">{item.user.bio || "No bio available"}</p>
 												</div>
-												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - 12 min read</p>
+												<p className='text-xs'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
 											</Link>
-											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/logo.png'} alt="" className='h-36 sm:h-48 lg:h-60 w-full object-cover mb-4' />
+											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/logo.png'} alt="" className='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
-												<h1 className='font-semibold text-base mb-2'>{item.title}</h1>
+												<h1 className='font-semibold text-sm mb-1.5 font-heading'>{item.title}</h1>
 											</Link>
-											<p className='mb-4'>{item.description}</p>
+											<p className='mb-3 text-sm'>{item.description}</p>
 											<PostItem
 												id={item.id}
 												isLiked={isLiked}
@@ -175,22 +188,22 @@ const CategoryPosts = () => {
 								)
 							})
 						) : (
-							<div className="p-4 text-center text-gray-500">No posts available for {category} category.</div>
+							<div className="p-3 text-center text-gray-500 text-sm">No posts available for {category} category.</div>
 						)}
 					</div>
 				</div>
-				<div className='w-full lg:w-1/3 mt-8 lg:mt-0 lg:ml-8 px-4'>
-					<div className='flex flex-row items-center mb-4'>
-						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/logo.png'} alt="" width={50} height={50} className="rounded-full mr-4" />
-						<p className='text-sm font-semibold'>The {memoizedUserData?.username} Blog</p>
+				<div className='w-full lg:w-1/3 mt-6 lg:mt-0 lg:ml-6 px-3 font-content'>
+					<div className='flex flex-row items-center mb-3'>
+						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/logo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+						<p className='text-xs font-semibold'>The {memoizedUserData?.username} Blog</p>
 					</div>
-					<p className='text-sm mb-2'>The official Pradeep Blog.</p>
-					<p className='text-sm mb-2 text-green-500 cursor-pointer hover:underline'>More information</p>
-					<p className='mb-2'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
-					<p className='mb-2 font-semibold'>ELSEWHERE</p>
-					<div className='flex space-x-2'>
-						<SocialIcon url='https://www.facebook.com' style={{ height: 25, width: 25 }} />
-						<SocialIcon url='https://www.linkedin.com' style={{ height: 25, width: 25 }} />
+					<p className='text-xs mb-1.5'>The official Pradeep Blog.</p>
+					<p className='text-xs mb-1.5 text-green-500 cursor-pointer hover:underline'>More information</p>
+					<p className='mb-1.5 text-xs'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
+					<p className='mb-1.5 font-semibold text-xs'>ELSEWHERE</p>
+					<div className='flex space-x-1.5'>
+						<SocialIcon url='https://www.facebook.com' style={{ height: 20, width: 20 }} />
+						<SocialIcon url='https://www.linkedin.com' style={{ height: 20, width: 20 }} />
 					</div>
 				</div>
 			</div>

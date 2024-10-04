@@ -6,3 +6,218 @@ form {
 form::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
+
+/* ReactQuill styles */
+.ql-editor {
+	padding: 0;
+}
+.ql-container {
+	min-height: 240px
+}
+
+.ql-syntax {
+  background-color: #f5f5f5 !important; /* Change to your desired background color */
+  color: #333 !important; /* Change the text color if needed */
+  border-radius: 4px;
+  padding: 10px;
+	font-family: 'Cascadia Code', monospace !important; /* Changed to Cascadia Code */
+}
+
+.custom-content {
+	font-family: 'Cascadia Code';
+	color: #2d3748;
+	font-size: 12px;
+	line-height: 1.4;
+	max-width: 48rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Headings */
+.custom-content h1, .custom-content h2, .custom-content h3,
+.custom-content h4, .custom-content h5, .custom-content h6 {
+	font-family: 'Cascadia Code';
+	font-weight: bold;
+	line-height: 1.2;
+	margin-bottom: 0.5rem;
+}
+
+.custom-content h1 { font-size: 1.25rem; }
+.custom-content h2 { font-size: 1.125rem; }
+.custom-content h3 { font-size: 1rem; }
+.custom-content h4 { font-size: 0.875rem; }
+.custom-content h5 { font-size: 0.75rem; }
+.custom-content h6 { font-size: 0.75rem; }
+
+/* Code blocks */
+.custom-content pre.code-block-custom {
+	background-color: #f7fafc;
+	border-radius: 0.375rem;
+	padding: 1rem;
+	overflow-x: auto;
+	margin-bottom: 1rem;
+	font-size: 0.75rem;
+}
+
+.custom-content pre.code-block-custom code {
+	font-family: 'Cascadia Code', monospace !important; /* Changed to Cascadia Code */
+	line-height: 1.4;
+}
+
+/* Inline code */
+.custom-content :not(pre) > code {
+	background-color: #edf2f7;
+	border-radius: 0.375rem;
+	font-family: 'Cascadia Code', monospace; /* Changed to Cascadia Code */
+	font-size: 0.75rem;
+	padding: 0.2rem 0.4rem;
+}
+
+/* Paragraphs */
+.custom-content p {
+	margin-bottom: 1px;
+}
+
+/* Lists */
+.custom-content ul, .custom-content ol {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+  list-style-position: outside;
+}
+
+.custom-content ul {
+  list-style-type: disc;
+}
+
+.custom-content ol {
+  list-style-type: decimal;
+}
+
+.custom-content li {
+  margin-bottom: 0.3rem;
+}
+
+.custom-content li > ul,
+.custom-content li > ol {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.custom-content li::marker {
+  color: #4a5568;
+}
+
+/* Blockquotes */
+.custom-content blockquote {
+	border-left-width: 4px;
+	border-color: #2d3748;
+	color: #4a5568;
+	padding-left: 1rem;
+	margin-bottom: 1rem;
+	font-style: italic;
+}
+
+/* Links */
+.custom-content a {
+	color: #2f855a;
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-color: #2f855a;
+}
+
+.custom-content a:hover {
+	border-bottom-width: 2px;
+}
+
+/* Images */
+.custom-content img {
+	max-width: 100%;
+	height: auto;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+/* Horizontal Rule */
+.custom-content hr {
+	border-top-width: 1px;
+	border-color: #e2e8f0;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+/* Emphasis */
+.custom-content em {
+	font-style: italic;
+}
+
+.custom-content strong {
+	font-weight: bold;
+}
+
+.ql-picker.ql-font {
+  .ql-picker-item {
+    font-size: 0;
+    &:before {
+      content: attr(data-value) !important;
+      font-size: 12px;
+    }
+  }
+}
+
+.ql-picker.ql-font {
+  .ql-active {
+    &:before {
+      content: attr(data-value) !important;
+      font-size: 12px;
+    }
+  }
+}
+
+.ql-editor {
+	font-family: 'Cascadia Code', monospace !important; /* Set default font */
+	font-size: 14px; /* Adjust size as needed */
+}
+
+.ql-font-Cascadia-Code {
+	font-family: 'Cascadia Code', monospace; /* Ensure the font family is applied */
+}
+
+/* Responsive font sizes */
+@media (max-width: 640px) {
+	.custom-content {
+		font-size: 0.875rem;
+	}
+	.custom-content h1 { font-size: 1.25rem; }
+	.custom-content h2 { font-size: 1.125rem; }
+	.custom-content h3 { font-size: 1rem; }
+	.custom-content h4 { font-size: 0.875rem; }
+	.custom-content h5 { font-size: 0.75rem; }
+	.custom-content h6 { font-size: 0.75rem; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+	.custom-content {
+		font-size: 0.875rem;
+	}
+	.custom-content h1 { font-size: 1.375rem; }
+	.custom-content h2 { font-size: 1.25rem; }
+	.custom-content h3 { font-size: 1.125rem; }
+	.custom-content h4 { font-size: 1rem; }
+	.custom-content h5 { font-size: 0.875rem; }
+	.custom-content h6 { font-size: 0.875rem; }
+}
+
+@media (min-width: 1025px) {
+	.custom-content {
+		font-size: 0.875rem;
+	}
+	.custom-content h1 { font-size: 1.5rem; }
+	.custom-content h2 { font-size: 1.375rem; }
+	.custom-content h3 { font-size: 1.25rem; }
+	.custom-content h4 { font-size: 1.125rem; }
+	.custom-content h5 { font-size: 1rem; }
+	.custom-content h6 { font-size: 0.875rem; }
+}

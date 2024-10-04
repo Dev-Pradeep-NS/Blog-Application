@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useGetAccessToken } from './useGetAccesstoken';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useLogout } from './useAuth';
 
 const AuthContext = createContext({
@@ -27,7 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 					setToken(response.access_token);
 					setIsAuthenticated(true);
 				} else {
-					console.log("there")
 					setIsAuthenticated(false);
 				}
 			},

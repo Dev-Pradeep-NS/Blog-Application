@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useMutation, useQuery } from "react-query";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { usePostStore } from "../../store";
-import type { ItemType, PostData } from "../../interfaces";
+import type { ItemType, PostData, PostDataForEmail } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
+import { useSendEmail } from "./useSendEmail";
+import { useGetUserandEmail } from "./useUserdetails";
 
 export const usePost = (server_url: string, token: string) => {
 	const { setPostData } = usePostStore();
@@ -38,6 +40,8 @@ export const useShowPost = (server_url: string, userName: string, slug: string, 
 
 export const useCreatePost = (server_url: string, token: string) => {
 	const navigate = useNavigate();
+	const { data: usersemails } = useGetUserandEmail(server_url, token);
+	const sendEmail = useSendEmail();
 
 	return useMutation({
 		mutationFn: (postData: PostData) => {
@@ -54,8 +58,51 @@ export const useCreatePost = (server_url: string, token: string) => {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-		}, onSuccess: () => {
-			navigate("/");
-		}
+		},
+		onSuccess: async (response) => {
+			if (usersemails && Array.isArray(usersemails.Users) && response.data) {
+				const postDetails: PostDataForEmail = {
+					title: response.data.post.title,
+					author: response.data.user.username,
+					description: response.data.post.description,
+					link: `${server_url}/posts/${response.data.post.id}`,
+				};
+
+				try {
+					await sendEmail.mutateAsync({ users: usersemails.Users, post: postDetails });
+					console.log('Email sent successfully');
+				} catch (error) {
+					console.error('Failed to send email:', error);
+				}
+			} else {
+				console.log('No users to send email to');
+			}
+
+			navigate('/posts');
+		},
+		onError: (error) => {
+			console.error('Post creation failed', error);
+		},
 	});
 };
+
+export const useDeletePost = (server_url: string, token: string, post_id: number) => {
+	const queryClient = new QueryClient()
+	const navigate = useNavigate()
+	return useMutation({
+		mutationFn: async () => {
+			const response = await axios.delete(`${server_url}/posts/${post_id}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
+			})
+			return response
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["getPosts"]
+			});
+			navigate("/posts")
+		}
+	})
+}

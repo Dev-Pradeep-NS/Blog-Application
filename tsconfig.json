@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "ES2015",
 		"lib": ["dom", "dom.iterable", "es5"],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -14,7 +14,7 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
 	},
 	"plugins": {
     "transform-dotenv": {

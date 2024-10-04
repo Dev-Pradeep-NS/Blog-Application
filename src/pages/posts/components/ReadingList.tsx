@@ -4,29 +4,31 @@ import { useAuth } from '../../../utils/hooks/AuthContext';
 import { usePost } from '../../../utils/hooks/usePosts';
 import { useUserStore } from '../../../store';
 import useImageUrls from '../../../utils/helpers/getImageUrl';
-import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { MdBookmarkAdded } from "react-icons/md";
+import { MdOutlineBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import formatDate from '../../../utils/helpers/formatDate';
 import type { Bookmark, ItemType, User } from '../../../interfaces';
 import { Link } from 'react-router-dom';
 
-const ImageData = ({ article, user, bookmarkData, id }: { article: ItemType; user: User; bookmarkData: Bookmark[]; id: number }) => {
+const ImageData = ({ article }: { article: ItemType }) => {
 	const { getImageUrl } = useImageUrls();
+	return (
+		<div className="mt-2 ml-4 flex-shrink-0">
+			<img src={article.featuredImage_url ? getImageUrl(article.featuredImage_url) : ''} alt={article.title} className="w-20 h-20 object-cover rounded-lg" />
+		</div>
+	)
+}
+
+const BookmarkButton = ({ article, user, bookmarkData }: { article: ItemType; user: User; bookmarkData: Bookmark[] }) => {
 	const { token } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
-	const { mutate: bookmarkPost } = useBookmarkPost(server_url, id, token)
-
-
+	const { mutate: bookmarkPost } = useBookmarkPost(server_url, article.id, token)
 	return (
-		<div className="mt-2 sm:mt-0 sm:ml-4 flex-shrink-0 flex flex-row sm:flex-col justify-between items-center">
-			<img src={article.featuredImage_url ? getImageUrl(article.featuredImage_url) : ''} alt={article.title} className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg mb-0 sm:mb-2" />
-			<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none mt-2 sm:mt-0'>
-				{bookmarkData?.some((item: Bookmark) => item.user_id === user?.id && item.post_id === article.id)
-					? <MdBookmarkAdded size={24} />
-					: <MdOutlineBookmarkAdd size={24} />
-				}
-			</button>
-		</div>
+		<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none ml-2'>
+			{bookmarkData?.some((item: Bookmark) => item.user_id === user?.id && item.post_id === article.id)
+				? <MdBookmarkAdded size={18} />
+				: <MdOutlineBookmarkAdd size={18} />
+			}
+		</button>
 	)
 }
 
@@ -52,42 +54,43 @@ const ReadingList = () => {
 	if (bookmarkError || postsError) return <div>Error loading data.</div>;
 
 	return (
-		<div className="font-cas place-self-center container mx-auto my-4 sm:my-6 md:my-8 lg:my-10 px-2 sm:px-4 md:px-6 lg:px-8 max-w-4xl">
-			{/* Profile Section */}
-			<div className="flex flex-col sm:flex-row justify-between items-center bg-white p-3 sm:p-4 md:p-6 rounded-lg">
-				<div className="flex items-center mb-2 sm:mb-0">
-					<div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gray-300 rounded-full flex items-center justify-center text-base sm:text-lg md:text-xl font-bold text-white">
+		<div className="font-med place-self-center container mx-auto my-8 px-6 max-w-3xl">
+			<div className="flex flex-row justify-between items-center bg-white p-4 rounded-lg">
+				<div className="flex items-center">
+					<div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-base font-bold text-white">
 						{user?.username?.charAt(0).toUpperCase()}
 					</div>
-					<div className="ml-3 sm:ml-4 md:ml-5">
-						<h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">{user?.username}</h2>
-						<h1 className="text-xs sm:text-sm md:text-base">{user?.created_at ? formatDate(user.created_at) : ''} - {filteredPosts.length} {filteredPosts.length === 1 ? 'story' : 'stories'}</h1>
+					<div className="ml-4">
+						<h2 className="text-lg font-semibold text-gray-800">{user?.username}</h2>
+						<h1 className="text-xs">{user?.created_at ? formatDate(user.created_at) : ''} - {filteredPosts.length} {filteredPosts.length === 1 ? 'story' : 'stories'}</h1>
 					</div>
 				</div>
 			</div>
 
-			<h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 my-3 sm:my-4 md:my-5">Reading list</h1>
+			<h1 className="text-base font-bold text-gray-800 my-4">Reading list</h1>
 
-			<div className="grid gap-4 sm:gap-6 md:gap-8">
+			<div className="grid gap-6">
 				{filteredPosts.map((article) => (
-					<div key={article.id} className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 flex flex-col sm:flex-row">
-						<Link to={`/@${article.user.username}/${article.slug}`} className="flex-grow">
-							<div className="flex-grow">
-								<div className="mb-2 sm:mb-4">
-									<h3 className="text-base sm:text-lg md:text-xl font-semibold mb-1 sm:mb-2 md:mb-3 text-gray-800">{article.title}</h3>
-									<p className="text-xs sm:text-sm md:text-base text-gray-600 mb-2 sm:mb-4">{article.description}</p>
-									<div className="flex flex-wrap items-center text-xs sm:text-sm md:text-base text-gray-500">
-										<span>{formatDate(article.created_at)}</span>
-										<span className="mx-1 sm:mx-2">•</span>
-										<span>{article.view_count} views</span>
-										<span className="mx-1 sm:mx-2">•</span>
-										<span>{article.Comments.length} comments</span>
+					<div key={article.id} className="bg-white rounded-lg shadow-md p-4 flex flex-row">
+						<div className="flex-grow">
+							<div className="mb-3">
+								<Link to={`/@${article.user.username}/${article.slug}`} className="flex-grow">
+									<h3 className="text-base font-semibold mb-2 text-gray-800">{article.title}</h3>
+									<p className="text-xs text-gray-600 mb-3">{article.description}</p>
+								</Link>
+								<div className="flex flex-wrap items-center text-xs">
+									<span>{formatDate(article.created_at)}</span>
+									<span className="mx-1">•</span>
+									<span>{article.view_count} views</span>
+									<span className="mx-1">•</span>
+									<span>{article.Comments.length} comments</span>
+									<div className='ml-auto'>
+										{user && <BookmarkButton article={article} user={user} bookmarkData={bookmarkData} />}
 									</div>
 								</div>
 							</div>
-						</Link>
-
-						{user && <ImageData article={article} user={user} bookmarkData={bookmarkData} id={article.id} />}
+						</div>
+						<ImageData article={article} />
 					</div>
 				))}
 			</div>
