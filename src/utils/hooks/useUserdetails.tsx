@@ -114,6 +114,26 @@ export const useUnFollowUser = (server_url: string, followingID: number, token: 
 	})
 }
 
+export const useUploadProfileImage = (server_url: string, user_id: number, token: string) => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (formData: FormData) => {
+			return axios.post(`${server_url}/users/${user_id}/avatar`, formData, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["userDetailsbyid"],
+			});
+		},
+	});
+};
+
 export const useUpdateProfile = (server_url: string, token: string, user_id: number, username: string, email: string, bio: string) => {
 	const queryClient = useQueryClient();
 

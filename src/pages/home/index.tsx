@@ -15,12 +15,12 @@ const HomePage: React.FC = () => {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
 	const { isAuthenticated } = useAuth();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-		}, 5000);
+		}, 8000);
 
 		return () => clearInterval(interval);
 	}, []);
@@ -30,10 +30,9 @@ const HomePage: React.FC = () => {
 	};
 
 	const explorePosts = () => {
-		if (isAuthenticated)
-			navigate('/posts')
-		navigate('/register')
-	}
+		if (isAuthenticated) navigate('/posts');
+		else navigate('/register');
+	};
 
 	return (
 		<div className="min-h-screen bg-gray-100 relative overflow-hidden">
@@ -44,14 +43,14 @@ const HomePage: React.FC = () => {
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
-					transition={{ duration: 1 }}
+					transition={{ duration: 1.5 }} // Increase duration for smoother fade
 				>
 					<img
 						src={images[currentImageIndex]}
 						alt={`Background ${currentImageIndex + 1}`}
 						className="w-full h-full object-cover"
 						onLoad={handleImageLoad}
-						style={{ display: isLoading ? 'none' : 'block' }}
+						style={{ display: isLoading ? 'none' : 'block', willChange: 'opacity, transform' }} // Hardware acceleration
 					/>
 				</motion.div>
 			</AnimatePresence>
@@ -66,16 +65,16 @@ const HomePage: React.FC = () => {
 			<div className="relative z-10 min-h-screen flex flex-col">
 				<header className="bg-white bg-opacity-80 shadow">
 					<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-						<h1 className="text-3xl font-bold text-gray-900">Welcome to Pradeep Blog</h1>
+						<h1 className="text-3xl font-bold text-gray-900">Welcome to Specwise Blogs</h1>
 					</div>
 				</header>
 				<main className="flex-grow flex items-center justify-center">
 					<div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
 						<motion.div
 							className="bg-white bg-opacity-80 rounded-lg p-8 text-center"
-							initial={{ scale: 0.8, opacity: 0 }}
+							initial={{ scale: 0.9, opacity: 0 }}
 							animate={{ scale: 1, opacity: 1 }}
-							transition={{ duration: 0.5 }}
+							transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }} // Smooth scaling
 						>
 							<h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700 mb-4">Discover Amazing Content</h2>
 							<p className="text-gray-500 text-sm sm:text-base md:text-lg mb-6">Stay tuned for insightful articles and engaging stories.</p>
@@ -83,8 +82,8 @@ const HomePage: React.FC = () => {
 								className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm sm:text-base"
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
-								type='button'
-								onClick={() => explorePosts()}
+								type="button"
+								onClick={explorePosts}
 							>
 								Explore Posts
 							</motion.button>

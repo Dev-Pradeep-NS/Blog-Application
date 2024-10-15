@@ -114,31 +114,31 @@ const CategoryPosts = () => {
 	return (
 		<div className="mt-4">
 			<div className="flex flex-wrap font-semibold">
-				<button onClick={() => handleCategoryClick('latest')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('latest')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Latest
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'latest' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('trending')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('trending')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Trending
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'trending' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('technology')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('technology')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Technology
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'technology' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('lifestyle')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('lifestyle')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Lifestyle
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'lifestyle' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('travel')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('travel')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Travel
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'travel' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('food')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('food')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Food
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'food' ? '100%' : '0%' }} />
 				</button>
-				<button onClick={() => handleCategoryClick('other')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-xs">
+				<button onClick={() => handleCategoryClick('other')} type="button" className="mr-2 mb-2 p-1.5 cursor-pointer text-sm">
 					Other
 					<div className="h-0.5 bg-gray-500 mt-0.5 transition-all duration-300 ease-in-out" style={{ width: selectedCategory === 'other' ? '100%' : '0%' }} />
 				</button>
@@ -146,7 +146,7 @@ const CategoryPosts = () => {
 			<div className='flex flex-col lg:flex-row'>
 				<div className='w-full lg:w-2/3'>
 					<hr />
-					<div className='flex flex-col mx-3 lg:ml-8 font-content'>
+					<div className='flex flex-col mx-3 lg:ml-8 '>
 						{filteredData && filteredData.length > 0 ? (
 							filteredData.map((item: ItemType) => {
 								const commentCount = item.Comments.filter(i => i.parent_id === null).length;
@@ -160,7 +160,7 @@ const CategoryPosts = () => {
 									<div key={item.id} className='my-0'>
 										<div className='mb-4 mr-4 flex flex-col'>
 											<Link to={`/@${item.user.username}`} className='flex flex-row my-4 items-center relative group'>
-												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/logo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/specwiselogo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
 												<div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-white text-gray-900 text-xs rounded-lg p-3 shadow-xl whitespace-normal w-40 max-w-xs z-10">
 													<p className="font-semibold text-sm text-center">{item.user.username}</p>
 													<p className="text-gray-500 text-xxs text-center">{formatDate(item.user.created_at)}</p>
@@ -168,9 +168,9 @@ const CategoryPosts = () => {
 												</div>
 												<p className='text-xs'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
 											</Link>
-											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/logo.png'} alt="" className='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
+											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/specwiselogo.png'} alt="" className='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
-												<h1 className='font-semibold text-sm mb-1.5 font-heading'>{item.title}</h1>
+												<h1 className='font-semibold text-sm mb-1.5'>{item.title}</h1>
 											</Link>
 											<p className='mb-3 text-sm'>{item.description}</p>
 											<PostItem
@@ -192,12 +192,12 @@ const CategoryPosts = () => {
 						)}
 					</div>
 				</div>
-				<div className='w-full lg:w-1/3 mt-6 lg:mt-0 lg:ml-6 px-3 font-content'>
+				<div className='w-full lg:w-1/3 mt-6 lg:mt-0 lg:ml-6 px-3 '>
 					<div className='flex flex-row items-center mb-3'>
-						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/logo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/specwiselogo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
 						<p className='text-xs font-semibold'>The {memoizedUserData?.username} Blog</p>
 					</div>
-					<p className='text-xs mb-1.5'>The official Pradeep Blog.</p>
+					<p className='text-xs mb-1.5'>The official Specwise Blogs.</p>
 					<p className='text-xs mb-1.5 text-green-500 cursor-pointer hover:underline'>More information</p>
 					<p className='mb-1.5 text-xs'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
 					<p className='mb-1.5 font-semibold text-xs'>ELSEWHERE</p>

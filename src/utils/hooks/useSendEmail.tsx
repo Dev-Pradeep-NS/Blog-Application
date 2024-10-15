@@ -71,7 +71,7 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
     <div class="container">
       <h1>New Post Alert!</h1>
       <p>Hello ${username},</p>
-      <p>We're excited to inform you that a new post has been added to our Pradeep Blog community. Don't miss out on the latest discussions and insights!</p>
+      <p>We're excited to inform you that a new post has been added to our Specwise Blogs community. Don't miss out on the latest discussions and insights!</p>
       <div class="post-details">
         <h2>${post.title}</h2>
         <p><strong>Author:</strong> ${post.author}</p>
@@ -81,8 +81,8 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
       <a href="${post.link}" class="cta-button">View New Post</a>
       <p>Your engagement makes our community thrive. We can't wait to hear your thoughts!</p>
       <div class="community-info">
-        <h3>About Pradeep Blog Community</h3>
-        <p>Pradeep Blog is a vibrant community of tech enthusiasts, developers, and innovators. Here's what makes us special:</p>
+        <h3>About Specwise Blogs Community</h3>
+        <p>Specwise Blogs is a vibrant community of tech enthusiasts, developers, and innovators. Here's what makes us special:</p>
         <ul>
           <li>Diverse topics covering the latest in technology, programming, and digital trends</li>
           <li>Expert contributors sharing in-depth knowledge and practical insights</li>
@@ -92,7 +92,7 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
         </ul>
         <p>Join us in shaping the future of technology through meaningful conversations and collaborative learning!</p>
       </div>
-      <p>Best regards,<br/>The Pradeep Blog Community Team</p>
+      <p>Best regards,<br/>The Specwise Blogs Community Team</p>
       <div class="footer">
         <p>If you prefer not to receive these notifications, you can update your preferences in your account settings.</p>
       </div>
@@ -110,7 +110,7 @@ export const useSendEmail = () => {
 				const emailData: EmailPayload = {
 					sender,
 					to: [{ email: user.Email, name: user.Username }],
-					subject: 'New Post in Pradeep Blog',
+					subject: 'New Post in Specwise Blogs',
 					htmlContent: emailTemplate(user.Username, data.post),
 				};
 

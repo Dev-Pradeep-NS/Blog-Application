@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ProfilePage from "./pages/profile";
 import ContactUs from "./pages/contact";
 import HomePage from "./pages/home";
+import MyChart from "./components/common/MyChart";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
 							<Route path="/register" element={<Register />} />
 							<Route path="/contact-us" element={<ContactUs />} />
 							<Route path="/" element={<HomePage />} />
+							<Route path="/chart" element={<MyChart />} />
 							<Route path="/:username/:slug" element={<PrivateRoute><ViewPost /></PrivateRoute>} />
 							<Route path="/category/:category" element={<PrivateRoute><LatestPosts /></PrivateRoute>} />
 							<Route path="/new-story" element={<PrivateRoute><PostForm /></PrivateRoute>} />

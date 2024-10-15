@@ -31,7 +31,7 @@ const ContactUs: React.FC = () => {
 					<h1 className="text-3xl font-bold mb-8 text-gray-900">Contact Us</h1>
 					<div className="flex flex-col lg:flex-row gap-8">
 						<div className="lg:w-1/2">
-							<img src="/logo.png" alt="Contact Us" className="w-full h-auto rounded-lg mx-auto lg:max-w-full" />
+							<img src="/specwiselogo.png" alt="Contact Us" className="w-full h-auto rounded-lg mx-auto lg:max-w-full" />
 						</div>
 						<div className="lg:w-1/2">
 							<form onSubmit={handleSubmit} className="space-y-6">

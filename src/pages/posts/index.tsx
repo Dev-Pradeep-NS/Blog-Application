@@ -54,14 +54,20 @@ const PostPage = () => {
 		<div className="container mx-auto mb-6 sm:mb-10 max-w-screen-lg">
 			<NavBar />
 			<hr className="sm:my-4" />
-			<div className="space-y-4 sm:space-y-8">
-				<RandomPost postData={memoizedPostList} />
-				<Posts postData={memoizedPostList} length={3} />
-				<h1 className='pl-3 lg:pl-0 font-light text-lg sm:text-xl md:text-xl underline'>For Writers and Editors</h1>
-				<Posts postData={memoizedPostList} length={memoizedPostList.length} />
-				<h1 className='pl-3 lg:pl-0 font-light text-lg sm:text-xl md:text-xl underline'>Latest</h1>
-				<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />
-			</div>
+			{memoizedPostList.length <= 0 ?
+				<div className="p-2 sm:p-4 text-sm sm:text-base">No Posts are published yet.</div>
+				:
+				<div className="space-y-4 sm:space-y-8">
+					<RandomPost postData={memoizedPostList} />
+					<Posts postData={memoizedPostList} length={3} isUser={false} />
+					<h1 className='pl-3 lg:pl-0 font-light text-base sm:text-xl md:text-xl underline'>For Writers and Editors</h1>
+					<Posts postData={memoizedPostList} length={memoizedPostList.length} isUser={true} />
+					<h1 className='pl-3 lg:pl-0 font-light text-base sm:text-xl md:text-xl underline'>Latest</h1>
+					<LatestPosts postData={memoizedPostList} user={memoizedUserData} followers={memoizedFollowers} />
+				</div>}
+			<footer className="mt-8 text-center text-sm text-gray-500">
+				© {new Date().getFullYear()} Specwise Blogs. All rights reserved.
+			</footer>
 		</div>
 	);
 }

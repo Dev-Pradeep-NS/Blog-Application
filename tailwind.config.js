@@ -302,8 +302,8 @@ module.exports = {
 			sans: ["Graphik", "sans-serif"],
 			serif: ["Merriweather", "serif"],
 			cas: ["Cascadia Code", "sans-serif"],
-			heading: ["Merriweather"],
-			content: ["Nunito"]
+			heading: ["Cascadia Code", "Fira Code", "monospace"],
+			content: ["Charter", "Georgia", "serif"],
 		},
 		spacing: {
 			px: "1px",

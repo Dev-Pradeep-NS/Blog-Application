@@ -13,7 +13,7 @@ const ImageData = ({ article }: { article: ItemType }) => {
 	const { getImageUrl } = useImageUrls();
 	return (
 		<div className="mt-2 ml-4 flex-shrink-0">
-			<img src={article.featuredImage_url ? getImageUrl(article.featuredImage_url) : ''} alt={article.title} className="w-20 h-20 object-cover rounded-lg" />
+			<img src={article.featuredImage_url ? getImageUrl(article.featuredImage_url) : ''} alt={article.title} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg" />
 		</div>
 	)
 }
@@ -25,8 +25,8 @@ const BookmarkButton = ({ article, user, bookmarkData }: { article: ItemType; us
 	return (
 		<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none ml-2'>
 			{bookmarkData?.some((item: Bookmark) => item.user_id === user?.id && item.post_id === article.id)
-				? <MdBookmarkAdded size={18} />
-				: <MdOutlineBookmarkAdd size={18} />
+				? <MdBookmarkAdded size={16} className="sm:text-lg" />
+				: <MdOutlineBookmarkAdd size={16} className="sm:text-lg" />
 			}
 		</button>
 	)
@@ -54,29 +54,29 @@ const ReadingList = () => {
 	if (bookmarkError || postsError) return <div>Error loading data.</div>;
 
 	return (
-		<div className="font-med place-self-center container mx-auto my-8 px-6 max-w-3xl">
-			<div className="flex flex-row justify-between items-center bg-white p-4 rounded-lg">
+		<div className="font-med place-self-center container mx-auto my-4 sm:my-8 px-3 sm:px-6 max-w-3xl">
+			<div className="flex flex-row justify-between items-center bg-white p-3 sm:p-4 rounded-lg">
 				<div className="flex items-center">
-					<div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-base font-bold text-white">
+					<div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center text-sm sm:text-base font-bold text-white">
 						{user?.username?.charAt(0).toUpperCase()}
 					</div>
-					<div className="ml-4">
-						<h2 className="text-lg font-semibold text-gray-800">{user?.username}</h2>
+					<div className="ml-3 sm:ml-4">
+						<h2 className="text-base sm:text-lg font-semibold text-gray-800">{user?.username}</h2>
 						<h1 className="text-xs">{user?.created_at ? formatDate(user.created_at) : ''} - {filteredPosts.length} {filteredPosts.length === 1 ? 'story' : 'stories'}</h1>
 					</div>
 				</div>
 			</div>
 
-			<h1 className="text-base font-bold text-gray-800 my-4">Reading list</h1>
+			<h1 className="text-sm sm:text-base font-bold text-gray-800 my-3 sm:my-4">Reading list</h1>
 
-			<div className="grid gap-6">
+			<div className="grid gap-4 sm:gap-6">
 				{filteredPosts.map((article) => (
-					<div key={article.id} className="bg-white rounded-lg shadow-md p-4 flex flex-row">
+					<div key={article.id} className="bg-white rounded-lg shadow-md p-3 sm:p-4 flex flex-row">
 						<div className="flex-grow">
-							<div className="mb-3">
+							<div className="mb-2 sm:mb-3">
 								<Link to={`/@${article.user.username}/${article.slug}`} className="flex-grow">
-									<h3 className="text-base font-semibold mb-2 text-gray-800">{article.title}</h3>
-									<p className="text-xs text-gray-600 mb-3">{article.description}</p>
+									<h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-gray-800">{article.title}</h3>
+									<p className="text-xs text-gray-600 mb-2 sm:mb-3">{article.description}</p>
 								</Link>
 								<div className="flex flex-wrap items-center text-xs">
 									<span>{formatDate(article.created_at)}</span>
