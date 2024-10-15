@@ -14,6 +14,7 @@ import ProfilePage from "./pages/profile";
 import ContactUs from "./pages/contact";
 import HomePage from "./pages/home";
 import MyChart from "./components/common/MyChart";
+import NotFound from "./pages/notfound";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ function App() {
 							<Route path="/posts" element={<PrivateRoute><Posts /></PrivateRoute>} />
 							<Route path="/reading-list" element={<PrivateRoute><ReadingList /></PrivateRoute>} />
 							<Route path="/:username" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+							<Route path="*" element={<NotFound />} />
 						</Routes>
 					</div>
 				</AuthProvider>
