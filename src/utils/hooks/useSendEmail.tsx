@@ -104,7 +104,11 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
 export const useSendEmail = () => {
 	return useMutation({
 		mutationFn: async (data: { users: { Email: string, Username: string }[], post: PostDataForEmail }) => {
-			const sender = { email: 'rowdypradeep007@gmail.com', name: 'Pradeep' };
+			const email = process.env.REACT_BREVO_EMAIL;
+			const name = process.env.REACT_BREVO_NAME;
+			const api_key = process.env.REACT_BREVO_API_KEY;
+
+			const sender = { email: `${email}`, name: `${name}` };
 
 			const emailPromises = data.users.map(async (user) => {
 				const emailData: EmailPayload = {
@@ -116,7 +120,7 @@ export const useSendEmail = () => {
 
 				const response = await axios.post('https://api.brevo.com/v3/smtp/email', emailData, {
 					headers: {
-						'api-key': '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',
+						'api-key': `${api_key}`,
 						'Content-Type': 'application/json',
 					},
 				});
