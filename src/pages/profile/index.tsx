@@ -15,6 +15,8 @@ import { Link, useParams } from "react-router-dom";
 import type { User } from "../../interfaces";
 import formatDate from "../../utils/helpers/formatDate";
 import useImageUrls from "../../utils/helpers/getImageUrl";
+import { fetchImageUrl } from "../../utils/helpers/firebaseUtils";
+import ProfileImage from "../../components/common/ProfileImage";
 
 export default function ProfilePage() {
 	const { getImageUrl, getAvatarUrl } = useImageUrls();
@@ -125,7 +127,7 @@ export default function ProfilePage() {
 					<div className="flex flex-col sm:flex-row items-center mb-3">
 						{isEditing ? (
 							<div className="relative w-16 h-16 mb-3 sm:mb-0 sm:mr-3">
-								<img src={profile.avatar_url ? getAvatarUrl(profile.avatar_url) : '/specwiselogo.png'} alt="avatar" className="w-16 h-16 rounded-full" />
+								<ProfileImage profile={{ avatar_url: profile.avatar_url }} />
 								<label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<title>upload image</title>
@@ -141,7 +143,7 @@ export default function ProfilePage() {
 								/>
 							</div>
 						) : (
-							<img src={profile.avatar_url ? getAvatarUrl(profile.avatar_url) : '/specwiselogo.png'} alt="avatar" className="w-16 h-16 rounded-full mb-3 sm:mb-0 sm:mr-3" />
+							<ProfileImage profile={{ avatar_url: profile.avatar_url }} />
 						)}
 						<div className="text-center sm:text-left flex-grow">
 							{isEditing ? (
