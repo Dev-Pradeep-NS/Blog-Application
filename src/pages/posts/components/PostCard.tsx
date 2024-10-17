@@ -1,13 +1,13 @@
-import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import type { ItemType } from "../../../interfaces";
 import { Link } from "react-router-dom";
 import truncateString from "../../../utils/helpers/truncateString";
 import readingTime from "../../../utils/helpers/readingTime";
 import { useUserStore } from "../../../store";
+import ImageSet from "../../../components/common/ImageSet";
 
 const PostCard = ({ postData, length, isUser }: { postData: ItemType[], length: number, isUser: boolean }) => {
-	const { getImageUrl, getAvatarUrl } = useImageUrls();
+
 	const { user } = useUserStore()
 	let data: ItemType[] = postData;
 	if (isUser && user) {
@@ -21,7 +21,7 @@ const PostCard = ({ postData, length, isUser }: { postData: ItemType[], length: 
 					<div key={item.id} className="mb-8">
 						<Link to={`/@${item.user.username}/${item.slug}`} className='block'>
 							<div className='flex flex-col h-full'>
-								{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="" className='w-full aspect-[16/9] object-cover mb-3' />}
+								{item.featuredImage_url && <ImageSet source={item.featuredImage_url} classname='w-full aspect-[16/9] object-cover mb-3' />}
 								<div className='flex flex-col justify-between flex-grow'>
 									<div className='overflow-hidden'>
 										<h2 className='font-bold text-sm mb-2 leading-tight'>{item.title}</h2>
@@ -32,17 +32,10 @@ const PostCard = ({ postData, length, isUser }: { postData: ItemType[], length: 
 									<div className='flex items-center'>
 										<Link to={`/@${item.user.username}`}>
 											<div className="relative group mr-3">
-												{item.user.avatar_url ? (
-													<img
-														src={getAvatarUrl(item.user.avatar_url)}
-														alt=""
-														className="w-8 h-8 rounded-full object-cover"
-													/>
-												) : (
-													<img
-														src={'/specwiselogo.png'}
-														alt=""
-														className="w-8 h-8 rounded-full object-cover"
+												{item.user.avatar_url && (
+													<ImageSet
+														source={item.user.avatar_url}
+														classname="w-8 h-8 rounded-full object-cover"
 													/>
 												)}
 												<div className="hidden group-hover:block absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-white text-gray-900 text-sm rounded-lg p-4 shadow-xl whitespace-normal w-64 z-10">

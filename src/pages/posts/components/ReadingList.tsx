@@ -3,17 +3,17 @@ import { useBookmarkPost, useBookmarks } from '../../../utils/hooks/useBookmarks
 import { useAuth } from '../../../utils/hooks/AuthContext';
 import { usePost } from '../../../utils/hooks/usePosts';
 import { useUserStore } from '../../../store';
-import useImageUrls from '../../../utils/helpers/getImageUrl';
 import { MdOutlineBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import formatDate from '../../../utils/helpers/formatDate';
 import type { Bookmark, ItemType, User } from '../../../interfaces';
 import { Link } from 'react-router-dom';
+import ImageSet from '../../../components/common/ImageSet';
 
 const ImageData = ({ article }: { article: ItemType }) => {
-	const { getImageUrl } = useImageUrls();
+
 	return (
 		<div className="mt-2 ml-4 flex-shrink-0">
-			<img src={article.featuredImage_url ? getImageUrl(article.featuredImage_url) : ''} alt={article.title} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg" />
+			<ImageSet source={article.featuredImage_url} classname="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg" />
 		</div>
 	)
 }

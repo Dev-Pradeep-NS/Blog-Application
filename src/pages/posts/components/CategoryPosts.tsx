@@ -1,5 +1,4 @@
 import { useDisLikePost, useLikePost } from "../../../utils/hooks/useReactions";
-import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import { SocialIcon } from "react-social-icons";
 import type { ItemType, Reaction, Bookmark } from "../../../interfaces";
@@ -17,6 +16,7 @@ import { usePost } from "../../../utils/hooks/usePosts";
 import { useUserDetails, useUserFollowers } from "../../../utils/hooks/useUserdetails";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import readingTime from "../../../utils/helpers/readingTime";
+import ImageSet from "../../../components/common/ImageSet";
 
 const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCount, isBookmarked }: { id: number, isLiked: boolean, isDisliked: boolean, commentCount: number, likeCount: number, dislikeCount: number, isBookmarked: boolean }) => {
 	const { token } = useAuth();
@@ -56,7 +56,6 @@ const CategoryPosts = () => {
 	const navigate = useNavigate();
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 	const server_url = process.env.REACT_APP_SERVER_URL || '';
-	const { getImageUrl, getAvatarUrl } = useImageUrls();
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: user } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
 	const user_id = user?.id ?? 0;
@@ -160,7 +159,7 @@ const CategoryPosts = () => {
 									<div key={item.id} className='my-0'>
 										<div className='mb-4 mr-4 flex flex-col'>
 											<Link to={`/@${item.user.username}`} className='flex flex-row my-4 items-center relative group'>
-												<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/specwiselogo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+												<ImageSet source={item.user.avatar_url} classname="rounded-full mr-3 object-cover w-8 h-8" />
 												<div className="hidden group-hover:block absolute bottom-full left-0 mb-2 bg-white text-gray-900 text-xs rounded-lg p-3 shadow-xl whitespace-normal w-40 max-w-xs z-10">
 													<p className="font-semibold text-sm text-center">{item.user.username}</p>
 													<p className="text-gray-500 text-xxs text-center">{formatDate(item.user.created_at)}</p>
@@ -168,7 +167,7 @@ const CategoryPosts = () => {
 												</div>
 												<p className='text-xs'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
 											</Link>
-											<img src={item.featuredImage_url ? getImageUrl(item.featuredImage_url) : '/specwiselogo.png'} alt="" className='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
+											<ImageSet source={item.featuredImage_url} classname='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
 												<h1 className='font-semibold text-sm mb-1.5'>{item.title}</h1>
 											</Link>
@@ -194,7 +193,7 @@ const CategoryPosts = () => {
 				</div>
 				<div className='w-full lg:w-1/3 mt-6 lg:mt-0 lg:ml-6 px-3 '>
 					<div className='flex flex-row items-center mb-3'>
-						<img src={memoizedUserData.avatar_url ? getAvatarUrl(memoizedUserData?.avatar_url) : '/specwiselogo.png'} alt="" width={40} height={40} className="rounded-full mr-3 object-cover" />
+						<ImageSet source={memoizedUserData.avatar_url} classname="rounded-full mr-3 object-cover w-10 h-10" />
 						<p className='text-xs font-semibold'>The {memoizedUserData?.username} Blog</p>
 					</div>
 					<p className='text-xs mb-1.5'>The official Specwise Blogs.</p>

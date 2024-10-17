@@ -1,12 +1,12 @@
-import useImageUrls from "../../../utils/helpers/getImageUrl";
 import formatDate from "../../../utils/helpers/formatDate";
 import { SocialIcon } from "react-social-icons";
 import type { ItemType, Follower, User } from "../../../interfaces";
 import { Link } from "react-router-dom";
 import readingTime from "../../../utils/helpers/readingTime";
+import ImageSet from "../../../components/common/ImageSet";
 
 const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user: User, followers: Follower }) => {
-	const { getImageUrl, getAvatarUrl } = useImageUrls();
+
 	const data = postData.filter(item => new Date(item.created_at).getMonth() === new Date().getMonth())
 	return (
 		<div className='flex flex-col md:flex-row justify-start mx-3 lg:mx-0'>
@@ -24,7 +24,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 											<br />
 											<div className='flex flex-row items-center '>
 												<Link to={`/@${item.user.username}`} className="relative group">
-													<img src={item.user.avatar_url ? getAvatarUrl(item.user.avatar_url) : '/specwiselogo.png'} alt="" className='w-8 h-8 rounded-full mr-2' />
+													<ImageSet source={item.user.avatar_url} classname='w-8 h-8 rounded-full mr-2' />
 													<div className="hidden group-hover:block absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-white text-gray-900 text-sm rounded-lg p-4 shadow-xl whitespace-normal w-48 max-w-xs z-10">
 														<p className="font-semibold text-sm text-center">{data[0].user.username}</p>
 														<p className="text-gray-500 text-xs text-center">{formatDate(data[0].user.created_at)}</p>
@@ -36,7 +36,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 										</div>
 										{item.featuredImage_url && (
 											<div className='ml-2 flex-shrink-0'>
-												<img src={getImageUrl(item.featuredImage_url)} alt="" className='w-24 h-24 border-2 border-slate-200 object-cover' />
+												<ImageSet source={item.featuredImage_url} classname='w-24 h-24 border-2 border-slate-200 object-cover' />
 											</div>
 										)}
 									</div>
@@ -50,7 +50,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 
 			<div className='w-full md:w-1/3 mt-4 md:mt-0 md:ml-10 '>
 				<Link to={`/@${user.username}`} className='flex flex-row items-center' title={`Visit ${user?.username}'s blog`}>
-					<img src={user.avatar_url ? getAvatarUrl(user.avatar_url) : '/specwiselogo.png'} alt="" className='w-8 h-8 rounded-full mr-2' />
+					<ImageSet source={user.avatar_url} classname='w-8 h-8 rounded-full mr-2' />
 					<p className='text-base'>The {user?.username} Blog</p>
 				</Link>
 				<p className='text-sm font-semibold mb-1'>The official Specwise Blogs.</p>

@@ -14,12 +14,9 @@ import { useAuth } from "../../utils/hooks/AuthContext";
 import { Link, useParams } from "react-router-dom";
 import type { User } from "../../interfaces";
 import formatDate from "../../utils/helpers/formatDate";
-import useImageUrls from "../../utils/helpers/getImageUrl";
-import { fetchImageUrl } from "../../utils/helpers/firebaseUtils";
-import ProfileImage from "../../components/common/ProfileImage";
+import ImageSet from "../../components/common/ImageSet";
 
 export default function ProfilePage() {
-	const { getImageUrl, getAvatarUrl } = useImageUrls();
 	const [isEditing, setIsEditing] = useState(false);
 	const [showFollowers, setShowFollowers] = useState(false);
 	const [showFollowing, setShowFollowing] = useState(false);
@@ -127,7 +124,7 @@ export default function ProfilePage() {
 					<div className="flex flex-col sm:flex-row items-center mb-3">
 						{isEditing ? (
 							<div className="relative w-16 h-16 mb-3 sm:mb-0 sm:mr-3">
-								<ProfileImage profile={{ avatar_url: profile.avatar_url }} />
+								<ImageSet source={profile.avatar_url} classname="w-16 h-16 rounded-full mb-3 sm:mb-0 sm:mr-3" />
 								<label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<title>upload image</title>
@@ -143,7 +140,7 @@ export default function ProfilePage() {
 								/>
 							</div>
 						) : (
-							<ProfileImage profile={{ avatar_url: profile.avatar_url }} />
+							<ImageSet source={profile.avatar_url} classname="w-16 h-16 rounded-full mb-3 sm:mb-0 sm:mr-3" />
 						)}
 						<div className="text-center sm:text-left flex-grow">
 							{isEditing ? (
@@ -256,10 +253,9 @@ export default function ProfilePage() {
 									{followers.followers.slice(0, 5).map((follower: User) => (
 										<li key={follower.id}>
 											<Link to={`/@${follower.username}`} className="flex items-center hover:bg-gray-50 p-1 rounded-md transition duration-150 ease-in-out">
-												<img
-													src={follower.avatar_url ? getAvatarUrl(follower.avatar_url) : '/specwiselogo.png'}
-													alt=""
-													className="w-8 h-8 rounded-full mr-2 object-cover"
+												<ImageSet
+													source={follower.avatar_url}
+													classname="w-8 h-8 rounded-full mr-2 object-cover"
 												/>
 												<p className="font-medium text-gray-700 hover:text-blue-600 text-sm">@{follower.username}</p>
 											</Link>
@@ -280,10 +276,9 @@ export default function ProfilePage() {
 									{following.following.slice(0, 5).map((followedUser: User) => (
 										<li key={followedUser.id}>
 											<Link to={`/@${followedUser.username}`} className="flex items-center hover:bg-gray-50 p-1 rounded-md transition duration-150 ease-in-out">
-												<img
-													src={followedUser.avatar_url ? getAvatarUrl(followedUser.avatar_url) : '/specwiselogo.png'}
-													alt=""
-													className="w-8 h-8 rounded-full mr-2 object-cover"
+												<ImageSet
+													source={followedUser.avatar_url}
+													classname="w-8 h-8 rounded-full mr-2 object-cover"
 												/>
 												<p className="font-medium text-gray-700 hover:text-blue-600 text-sm">@{followedUser.username}</p>
 											</Link>
@@ -313,7 +308,7 @@ export default function ProfilePage() {
 												<span>5 min read</span>
 											</div>
 										</div>
-										{item.featuredImage_url && <img src={getImageUrl(item.featuredImage_url)} alt="featured" className='w-full sm:w-16 h-32 sm:h-16 object-cover sm:ml-3 mt-2 sm:mt-0' />}
+										{item.featuredImage_url && <ImageSet source={item.featuredImage_url} classname='w-full sm:w-16 h-32 sm:h-16 object-cover sm:ml-3 mt-2 sm:mt-0' />}
 									</div>
 								</Link>
 							))

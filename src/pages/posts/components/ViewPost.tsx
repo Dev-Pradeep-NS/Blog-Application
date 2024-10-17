@@ -21,18 +21,17 @@ import type { Bookmark, Comments, Reaction } from '../../../interfaces';
 import { useBookmarkPost, useBookmarks } from '../../../utils/hooks/useBookmarks';
 import { CommentSection } from '../comments';
 import { useAuth } from '../../../utils/hooks/AuthContext';
-import useImageUrls from '../../../utils/helpers/getImageUrl';
 import 'highlight.js/styles/github.css';
 import '../index.css'
 import DOMPurify from 'dompurify';
 import { useUserStore } from '../../../store';
 import readingTime from '../../../utils/helpers/readingTime';
+import ImageSet from '../../../components/common/ImageSet';
 
 const ViewPost = () => {
 	const [speechStatus, setSpeechStatus] = useState(false);
 	const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 	const [showCommentSection, setShowCommentSection] = useState(false)
-	const { getImageUrl, getAvatarUrl } = useImageUrls();
 	const { username, slug } = useParams();
 	const userName = username?.replace("@", "") || '';
 	const { token } = useAuth();
@@ -139,11 +138,11 @@ const ViewPost = () => {
 	return (
 		<div className='max-w-screen-lg mx-auto mt-10 '>
 			<div className='place-self-center container mx-auto mb-10 px-4 sm:px-6 lg:px-8 max-w-4xl'>
-				<img src={memoizedPostData?.featuredImage_url ? getImageUrl(memoizedPostData.featuredImage_url) : ''} alt="imageurl" className='w-full h-auto mx-auto' />
+				<ImageSet source={memoizedPostData?.featuredImage_url} classname='w-full h-auto mx-auto' />
 				<p className='text-center text-lg my-3 font-semibold'>{memoizedPostData?.title}</p>
 				<p className='mt-2 md:text-base sm:text-base lg:text-base'>{memoizedPostData?.description}</p>
 				<div className='flex flex-row items-center my-2'>
-					<img src={memoizedPostData?.user?.avatar_url ? getAvatarUrl(memoizedPostData?.user.avatar_url) : '/specwiselogo.png'} alt='' className='w-12 h-12 rounded-full mr-4' />
+					<ImageSet source={memoizedPostData?.user?.avatar_url} classname='w-12 h-12 rounded-full mr-4' />
 					<div>
 						<p className='text-sm font-medium text-green-500'>{username?.replace("@", "")}</p>
 						<p className='text-xs'>Published in The Specwise Blogs - {readingTime(memoizedPostData.content)} - {formatDate(memoizedPostData?.created_at ? memoizedPostData?.created_at : new Date().toLocaleDateString())}</p>
