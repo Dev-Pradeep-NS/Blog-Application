@@ -21,7 +21,7 @@ export default function ProfilePage() {
 	const [showFollowers, setShowFollowers] = useState(false);
 	const [showFollowing, setShowFollowing] = useState(false);
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || "";
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { username } = useParams();
 	const { data: user, refetch } = useUserDetailsById(server_url, token, username?.replace("@", ""));
 	const { user: currentUser } = useUserStore();

@@ -15,7 +15,7 @@ const AuthContext = createContext({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [token, setToken] = useState<string>('');
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { mutate: getToken } = useGetAccessToken(server_url);
 	const { mutate: logoutMutation } = useLogout(server_url);
 	const navigate = useNavigate();

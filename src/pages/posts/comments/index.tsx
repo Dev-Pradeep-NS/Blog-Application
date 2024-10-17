@@ -15,7 +15,7 @@ interface CommentSectionProps {
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ comments, onClose, username, postId }) => {
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const [showReplyId, setShowReplyId] = useState<number | null>(null)
 	const [showReplies, setShowReplies] = useState<number | null>(null)
 	const [replyText, setReplyText] = useState<string>('')

@@ -36,7 +36,7 @@ const ViewPost = () => {
 	const userName = username?.replace("@", "") || '';
 	const { token } = useAuth();
 	const { user } = useUserStore();
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const contentRef = useRef<HTMLDivElement>(null);
 
 	const { isLoading: postLoading, error: postError, data: postData } = useShowPost(server_url, userName, slug || '', token);

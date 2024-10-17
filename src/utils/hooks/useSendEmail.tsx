@@ -120,9 +120,9 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
 export const useSendEmail = () => {
 	return useMutation({
 		mutationFn: async (data: { users: { Email: string, Username: string }[], post: PostDataForEmail }) => {
-			const email = process.env.REACT_APP_BREVO_EMAIL;
-			const name = process.env.REACT_APP_BREVO_NAME;
-			const api_key = process.env.REACT_APP_BREVO_API_KEY;
+			const email = process.env.REACT_APP_BREVO_EMAIL || window.env.REACT_APP_BREVO_EMAIL;
+			const name = process.env.REACT_APP_BREVO_NAME || window.env.REACT_APP_BREVO_NAME;
+			const api_key = process.env.REACT_APP_BREVO_API_KEY || window.env.REACT_APP_BREVO_API_KEY;
 
 			const sender = { email: `${email}`, name: `${name}` };
 

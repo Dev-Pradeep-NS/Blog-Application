@@ -12,7 +12,7 @@ const PostPage = () => {
 	const { token } = useAuth();
 	const [isReady, setIsReady] = useState(false);
 	const { setUserData } = useUserStore()
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
 	const user_id = userData?.id ?? 0;

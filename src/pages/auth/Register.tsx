@@ -9,7 +9,7 @@ import { useAuth } from "../../utils/hooks/AuthContext";
 const Register = () => {
 	const { token, setIsAuthenticated, setToken } = useAuth()
 	const navigate = useNavigate();
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 
 	useEffect(() => {
 		if (token && token.length > 0) {

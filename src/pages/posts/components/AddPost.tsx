@@ -15,7 +15,7 @@ hljs.configure({
 });
 
 const AddPost: React.FC = () => {
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const navigate = useNavigate();
 	const { token } = useAuth();
 	const [title, setTitle] = useState<string>("");

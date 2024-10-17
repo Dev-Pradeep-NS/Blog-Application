@@ -8,7 +8,7 @@ const ContactUs: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [subject, setSubject] = useState('');
 	const [message, setMessage] = useState('');
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { token } = useAuth();
 	const createContact = useAddContact(server_url, token);
 

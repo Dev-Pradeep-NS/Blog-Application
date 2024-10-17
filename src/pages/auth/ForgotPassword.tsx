@@ -16,7 +16,7 @@ interface IForgotPasswordInput {
 const ForgotPassword: React.FC = () => {
 	const navigate = useNavigate();
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || '';
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<IForgotPasswordInput>();
 	const [emailVerified, setEmailVerified] = useState(false);
 	const [email, setEmail] = useState<string>('');
