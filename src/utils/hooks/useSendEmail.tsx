@@ -45,6 +45,10 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
         padding: 10px 20px;
         border-radius: 5px;
         margin-top: 20px;
+        transition: background-color 0.3s ease;
+      }
+      .cta-button:hover {
+        background-color: #0056b3;
       }
       .footer {
         margin-top: 20px;
@@ -65,30 +69,42 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
         border-radius: 5px;
         margin-top: 20px;
       }
+      .post-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-top: 15px;
+      }
+      .highlight {
+        background-color: #fffacd;
+        padding: 2px 5px;
+        border-radius: 3px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>New Post Alert!</h1>
-      <p>Hello ${username},</p>
-      <p>We're excited to inform you that a new post has been added to our Specwise Blogs community. Don't miss out on the latest discussions and insights!</p>
+      <h1>🎉 New Post Alert! 🎉</h1>
+      <p>Hello <span class="highlight">${username}</span>,</p>
+      <p>We're thrilled to inform you that a new post has been added to our Specwise Blogs community. Get ready for some fresh insights and engaging discussions!</p>
       <div class="post-details">
         <h2>${post.title}</h2>
         <p><strong>Author:</strong> ${post.author}</p>
         <p><strong>Summary:</strong> ${post.description}</p>
+        ${post.image ? `<img src="${post.image}" alt="Post Image" class="post-image">` : ''}
       </div>
-      <p>Head over to our platform to check it out and join the conversation.</p>
-      <a href="${post.link}" class="cta-button">View New Post</a>
-      <p>Your engagement makes our community thrive. We can't wait to hear your thoughts!</p>
+      <p>Don't miss out on this exciting new content. Head over to our platform to dive in and share your thoughts!</p>
+      <a href="${post.link}" class="cta-button">Read Full Post</a>
+      <p>Your engagement is what makes our community thrive. We can't wait to hear your perspective!</p>
       <div class="community-info">
-        <h3>About Specwise Blogs Community</h3>
-        <p>Specwise Blogs is a vibrant community of tech enthusiasts, developers, and innovators. Here's what makes us special:</p>
+        <h3>🌟 About Specwise Blogs Community</h3>
+        <p>Specwise Blogs is a vibrant hub for tech enthusiasts, developers, and innovators. Here's what makes us special:</p>
         <ul>
-          <li>Diverse topics covering the latest in technology, programming, and digital trends</li>
-          <li>Expert contributors sharing in-depth knowledge and practical insights</li>
-          <li>Interactive discussions and networking opportunities with like-minded professionals</li>
-          <li>Regular updates on industry news, best practices, and cutting-edge technologies</li>
-          <li>A supportive environment for both beginners and seasoned professionals to learn and grow</li>
+          <li>🔍 Diverse topics covering the latest in technology, programming, and digital trends</li>
+          <li>👨‍🏫 Expert contributors sharing in-depth knowledge and practical insights</li>
+          <li>💬 Interactive discussions and networking opportunities with like-minded professionals</li>
+          <li>📰 Regular updates on industry news, best practices, and cutting-edge technologies</li>
+          <li>🌱 A supportive environment for both beginners and seasoned professionals to learn and grow</li>
         </ul>
         <p>Join us in shaping the future of technology through meaningful conversations and collaborative learning!</p>
       </div>

@@ -64,8 +64,9 @@ export const useCreatePost = (server_url: string, token: string) => {
 				const postDetails: PostDataForEmail = {
 					title: response.data.post.title,
 					author: response.data.user.username,
+					image: response.data.post.featuredImage_url,
 					description: response.data.post.description,
-					link: `${server_url}/posts/${response.data.post.id}`,
+					link: `${window.location.origin}/@${response.data.user.username}/${response.data.post.slug}`,
 				};
 
 				try {

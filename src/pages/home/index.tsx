@@ -1,6 +1,5 @@
 import type React from 'react';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../utils/hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,16 +13,19 @@ const HomePage: React.FC = () => {
 
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isHovering, setIsHovering] = useState(false);
 	const { isAuthenticated } = useAuth();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-		}, 8000);
-
-		return () => clearInterval(interval);
+	const nextImage = useCallback(() => {
+		setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+		setIsLoading(true);
 	}, []);
+
+	useEffect(() => {
+		const interval = setInterval(nextImage, 8000);
+		return () => clearInterval(interval);
+	}, [nextImage]);
 
 	const handleImageLoad = () => {
 		setIsLoading(false);
@@ -36,24 +38,22 @@ const HomePage: React.FC = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-100 relative overflow-hidden">
-			<AnimatePresence>
-				<motion.div
-					key={images[currentImageIndex]}
-					className="absolute inset-0 w-full h-full"
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-					transition={{ duration: 1.5 }} // Increase duration for smoother fade
-				>
-					<img
-						src={images[currentImageIndex]}
-						alt={`Background ${currentImageIndex + 1}`}
-						className="w-full h-full object-cover"
-						onLoad={handleImageLoad}
-						style={{ display: isLoading ? 'none' : 'block', willChange: 'opacity, transform' }} // Hardware acceleration
-					/>
-				</motion.div>
-			</AnimatePresence>
+			<div
+				className="absolute inset-0 w-full h-full transition-opacity duration-1000"
+				style={{
+					backgroundImage: `url(${images[currentImageIndex]})`,
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+					opacity: isLoading ? 0 : 1
+				}}
+			>
+				<img
+					src={images[currentImageIndex]}
+					alt={`Background ${currentImageIndex + 1}`}
+					className="hidden"
+					onLoad={handleImageLoad}
+				/>
+			</div>
 			{isLoading && (
 				<div className='flex space-x-2 justify-center items-center bg-white h-screen dark:invert'>
 					<span className='sr-only'>Loading...</span>
@@ -70,24 +70,29 @@ const HomePage: React.FC = () => {
 				</header>
 				<main className="flex-grow flex items-center justify-center">
 					<div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							className="bg-white bg-opacity-80 rounded-lg p-8 text-center"
-							initial={{ scale: 0.9, opacity: 0 }}
-							animate={{ scale: 1, opacity: 1 }}
-							transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }} // Smooth scaling
+						<div
+							className="bg-white bg-opacity-80 rounded-lg p-8 text-center transform transition-all duration-300"
+							style={{
+								transform: isHovering ? 'scale(1.05)' : 'scale(1)',
+								boxShadow: isHovering ? '0 10px 25px rgba(0, 0, 0, 0.1)' : 'none'
+							}}
+							onMouseEnter={() => setIsHovering(true)}
+							onMouseLeave={() => setIsHovering(false)}
 						>
 							<h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700 mb-4">Discover Amazing Content</h2>
 							<p className="text-gray-500 text-sm sm:text-base md:text-lg mb-6">Stay tuned for insightful articles and engaging stories.</p>
-							<motion.button
-								className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm sm:text-base"
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
+							<button
+								className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm sm:text-base transition-all duration-300"
+								style={{
+									transform: isHovering ? 'translateY(-2px)' : 'translateY(0)',
+									boxShadow: isHovering ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'
+								}}
 								type="button"
 								onClick={explorePosts}
 							>
 								Explore Posts
-							</motion.button>
-						</motion.div>
+							</button>
+						</div>
 					</div>
 				</main>
 				<footer className="bg-white bg-opacity-80">
@@ -101,5 +106,4 @@ const HomePage: React.FC = () => {
 		</div>
 	);
 };
-
 export default HomePage;

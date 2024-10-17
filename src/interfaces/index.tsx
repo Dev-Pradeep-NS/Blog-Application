@@ -35,6 +35,7 @@ interface PostData {
 interface PostDataForEmail {
 	title: string,
 	author: string,
+	image: string,
 	description: string,
 	link: string
 }
