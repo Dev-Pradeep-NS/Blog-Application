@@ -24,6 +24,9 @@ COPY --from=build /app/build /usr/share/nginx/html
 # Copy the env template
 COPY ./public/env.template /usr/share/nginx/html/env.template
 
+# Add this line after copying the built assets
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
 
