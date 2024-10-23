@@ -4,7 +4,7 @@ import { useAuth } from "../../../utils/hooks/AuthContext";
 import { useNavigate } from "react-router-dom";
 import '../index.css'
 import { useCreatePost } from "../../../utils/hooks/usePosts";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';

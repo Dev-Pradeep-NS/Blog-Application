@@ -18,14 +18,14 @@ const PostCard = ({ postData, length, isUser }: { postData: ItemType[], length: 
 		<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-4 md:mx-6 lg:mx-0'>
 			{data.slice(0, length).map((item: ItemType) => {
 				return (
-					<div key={item.id} className="mb-8">
+					<div key={item.id}>
 						<Link to={`/@${item.user.username}/${item.slug}`} className='block'>
 							<div className='flex flex-col h-full'>
 								{item.featuredImage_url && <ImageSet source={item.featuredImage_url} classname='w-full aspect-[16/9] object-cover mb-3' />}
 								<div className='flex flex-col justify-between flex-grow'>
 									<div className='overflow-hidden'>
-										<h2 className='font-bold text-sm mb-2 leading-tight'>{item.title}</h2>
-										<p className='text-xs text-gray-700 mb-4 line-clamp-3'>
+										<h2 className='font-bold text-base mb-2 leading-tight'>{item.title}</h2>
+										<p className='text-sm text-gray-700 mb-4 line-clamp-3'>
 											{truncateString(item.description)}
 										</p>
 									</div>

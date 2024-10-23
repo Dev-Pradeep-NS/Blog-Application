@@ -31,6 +31,7 @@ const Login = () => {
 						setToken(response.access_token);
 						navigate('/posts');
 					} else {
+						navigate('/login')
 						console.error("No refresh token received");
 					}
 				},

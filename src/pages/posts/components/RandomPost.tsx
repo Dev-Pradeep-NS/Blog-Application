@@ -16,7 +16,7 @@ const RandomPost = ({ postData }: { postData: ItemType[] }) => {
 				)}
 				<div className='md:ml-4 lg:ml-6 xl:ml-10 w-full md:w-1/2'>
 					<h1 className='font-semibold text-base mb-2'>{postData[0]?.title}</h1>
-					<p className="mb-3 sm:mb-4 text-sm text-gray-700 ">{postData[0]?.description}</p>
+					<p className="mb-3 sm:mb-4 text-sm text-gray-700 line-clamp-5">{postData[0]?.description}</p>
 					<div className='flex flex-row items-center'>
 						<Link to={`/@${postData[0]?.user.username}`} className="relative group">
 							<ImageSet source={postData[0]?.user.avatar_url} classname="w-8 h-8 sm:w-10 sm:h-10 md:w-10 md:h-10 rounded-full mr-3 sm:mr-4 object-cover" />

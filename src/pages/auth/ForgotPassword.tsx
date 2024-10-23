@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useResetPassword, useVerifyEmail } from '../../utils/hooks/useAuth';
-import { useAuth } from '../../utils/hooks/AuthContext';
 
 interface IForgotPasswordInput {
 	email: string;
@@ -15,7 +14,6 @@ interface IForgotPasswordInput {
 
 const ForgotPassword: React.FC = () => {
 	const navigate = useNavigate();
-	const { token } = useAuth();
 	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<IForgotPasswordInput>();
 	const [emailVerified, setEmailVerified] = useState(false);

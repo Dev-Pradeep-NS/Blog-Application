@@ -5,7 +5,6 @@ import { IoBookmarksOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
 import { usePostStore, useUserStore } from "../../store";
 import type { ItemType } from "../../interfaces";
-import { useUserDetails } from '../../utils/hooks/useUserdetails';
 
 const NavBar = () => {
 	const { isAuthenticated } = useAuth();
@@ -106,20 +105,20 @@ const NavBar = () => {
 							{suggestions.length > 0 && (
 								<div ref={suggestionsRef} className="absolute mt-2 bg-white shadow-md w-full">
 									{suggestions.map((suggestion) => (
-										<div
+										<button
 											key={suggestion.id}
-											className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
+											className="py-2 px-4 hover:bg-gray-100 cursor-pointer w-full text-left"
 											onClick={() => handleSuggestionClick(suggestion)}
 											onKeyDown={(e) => {
 												if (e.key === 'Enter' || e.key === ' ') {
 													handleSuggestionClick(suggestion)
 												}
 											}}
-											role="button"
 											tabIndex={0}
+											type="button"
 										>
 											<p className='text-sm font-normal'>{suggestion.title}</p>
-										</div>
+										</button>
 									))}
 								</div>
 							)}
@@ -151,7 +150,7 @@ const NavBar = () => {
 					</div>
 
 					{isMenuOpen && (
-						<div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
+						<div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
 							<a href={`/${user?.username}`} className="px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center" role="menuitem" tabIndex={-1} id="user-menu-item-0">
 								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
 									<title>profile</title>
@@ -166,6 +165,14 @@ const NavBar = () => {
 									<path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
 								</svg>
 								Stats
+							</a>
+							<a href="/contact-us" className="px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center" role="menuitem" tabIndex={-1} id="user-menu-item-1">
+								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+									<title>contact</title>
+									<path fillRule="evenodd" d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" clipRule="evenodd" />
+									<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+								</svg>
+								Contact Us
 							</a>
 							<button className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center" role="menuitem" type='button' onClick={logout} tabIndex={-1} id="user-menu-item-2">
 								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -199,7 +206,7 @@ const NavBar = () => {
 					{suggestions.length > 0 && (
 						<div ref={suggestionsRef} className="mt-2">
 							{suggestions.map((suggestion) => (
-								<div
+								<button
 									key={suggestion.id}
 									className="py-2 hover:bg-gray-100 cursor-pointer"
 									onClick={() => handleSuggestionClick(suggestion)}
@@ -208,11 +215,11 @@ const NavBar = () => {
 											handleSuggestionClick(suggestion)
 										}
 									}}
-									role="button"
+									type="button"
 									tabIndex={0}
 								>
 									{suggestion.title}
-								</div>
+								</button>
 							))}
 						</div>
 					)}

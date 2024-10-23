@@ -25,8 +25,8 @@ const BookmarkButton = ({ article, user, bookmarkData }: { article: ItemType; us
 	return (
 		<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none ml-2'>
 			{bookmarkData?.some((item: Bookmark) => item.user_id === user?.id && item.post_id === article.id)
-				? <MdBookmarkAdded size={16} className="sm:text-lg" />
-				: <MdOutlineBookmarkAdd size={16} className="sm:text-lg" />
+				? <MdBookmarkAdded size={20} className="sm:text-lg" />
+				: <MdOutlineBookmarkAdd size={20} className="sm:text-lg" />
 			}
 		</button>
 	)
@@ -75,10 +75,10 @@ const ReadingList = () => {
 						<div className="flex-grow">
 							<div className="mb-2 sm:mb-3">
 								<Link to={`/@${article.user.username}/${article.slug}`} className="flex-grow">
-									<h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-gray-800">{article.title}</h3>
-									<p className="text-xs text-gray-600 mb-2 sm:mb-3">{article.description}</p>
+									<h3 className="text-base sm:text-base font-semibold mb-1 sm:mb-2 text-gray-800">{article.title}</h3>
+									<p className="text-sm text-gray-600 mb-2 sm:mb-3">{article.description}</p>
 								</Link>
-								<div className="flex flex-wrap items-center text-xs">
+								<div className="flex flex-wrap items-center text-sm">
 									<span>{formatDate(article.created_at)}</span>
 									<span className="mx-1">•</span>
 									<span>{article.view_count} views</span>

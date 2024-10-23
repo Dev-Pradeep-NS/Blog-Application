@@ -89,13 +89,14 @@ const ViewPost = () => {
 		if (memoizedPostData?.content) {
 			const timer = setTimeout(() => {
 				const sanitizedContent = DOMPurify.sanitize(memoizedPostData.content, {
-					ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'],
+					ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'div', 'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'u'],
 					ALLOWED_ATTR: ['href', 'name', 'target', 'class', 'id', 'start'],
 				});
 
 				if (contentRef.current) {
 					const parser = new DOMParser();
 					const doc = parser.parseFromString(sanitizedContent, 'text/html');
+					console.log(doc)
 
 					let listCounter = 1;
 					for (const ol of doc.querySelectorAll('ol')) {
@@ -108,8 +109,7 @@ const ViewPost = () => {
 					contentRef.current.innerHTML = modifiedContent;
 					contentRef.current.classList.add('custom-content');
 
-					const codeBlocks = contentRef.current.querySelectorAll('pre');
-					for (const block of codeBlocks) {
+					for (const block of contentRef.current.querySelectorAll('pre')) {
 						block.classList.add('code-block-custom');
 						hljs.highlightElement(block);
 					}
@@ -140,12 +140,12 @@ const ViewPost = () => {
 			<div className='place-self-center container mx-auto mb-10 px-4 sm:px-6 lg:px-8 max-w-4xl'>
 				<ImageSet source={memoizedPostData?.featuredImage_url} classname='w-full h-auto mx-auto' />
 				<p className='text-center text-lg my-3 font-semibold'>{memoizedPostData?.title}</p>
-				<p className='mt-2 md:text-base sm:text-base lg:text-base'>{memoizedPostData?.description}</p>
+				<p className='mt-2 md:text-base sm:text-base lg:text-lg'>{memoizedPostData?.description}</p>
 				<div className='flex flex-row items-center my-2'>
 					<ImageSet source={memoizedPostData?.user?.avatar_url} classname='w-12 h-12 rounded-full mr-4' />
 					<div>
-						<p className='text-sm font-medium text-green-500'>{username?.replace("@", "")}</p>
-						<p className='text-xs'>Published in The Specwise Blogs - {readingTime(memoizedPostData.content)} - {formatDate(memoizedPostData?.created_at ? memoizedPostData?.created_at : new Date().toLocaleDateString())}</p>
+						<p className='text-base font-medium text-green-500'>{username?.replace("@", "")}</p>
+						<p className='text-sm'>Published in The Specwise Blogs - {readingTime(memoizedPostData.content)} - {formatDate(memoizedPostData?.created_at ? memoizedPostData?.created_at : new Date().toLocaleDateString())}</p>
 					</div>
 				</div>
 				<div className='flex flex-col sm:flex-row justify-between items-center my-5 space-y-4 sm:space-y-0'>
@@ -157,7 +157,7 @@ const ViewPost = () => {
 							title={`Likes: ${memoizedReactions.filter(i => i.reaction_type === 'like').length}`}
 							aria-label="Like post"
 						>
-							{isLiked ? <BiSolidLike size={20} className="text-blue-500" /> : <BiLike size={20} />}
+							{isLiked ? <BiSolidLike size={22} className="text-blue-500" /> : <BiLike size={22} />}
 						</button>
 						<button
 							type="button"
@@ -166,7 +166,7 @@ const ViewPost = () => {
 							title={`Dislikes: ${memoizedReactions.filter(i => i.reaction_type === 'dislike').length}`}
 							aria-label="Dislike post"
 						>
-							{isDisliked ? <BiSolidDislike size={20} className="text-red-500" /> : <BiDislike size={20} />}
+							{isDisliked ? <BiSolidDislike size={22} className="text-red-500" /> : <BiDislike size={22} />}
 						</button>
 						<button
 							type='button'
@@ -174,19 +174,19 @@ const ViewPost = () => {
 							onClick={() => setShowCommentSection(true)}
 							aria-label="Show comments"
 						>
-							<MdOutlineInsertComment size={20} />
+							<MdOutlineInsertComment size={22} />
 							<span>{memoizedCommentsData?.count}</span>
 						</button>
 					</div>
 					<div className='flex items-center space-x-4'>
 						<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none'>
-							{isBookmarked ? <MdBookmarkAdded size={20} /> : <MdOutlineBookmarkAdd size={20} />}
+							{isBookmarked ? <MdBookmarkAdded size={22} /> : <MdOutlineBookmarkAdd size={22} />}
 						</button>
 						<button type='button' onClick={speak} className='focus:outline-none'>
-							{!speechStatus ? <CiPlay1 size={20} /> : <CiPause1 size={20} />}
+							{!speechStatus ? <CiPlay1 size={22} /> : <CiPause1 size={22} />}
 						</button>
 						{memoizedPostData.user_id === user?.id ? <button type='button' onClick={() => deletePost()} className='focus:outline-none'>
-							<MdDeleteForever size={20} />
+							<MdDeleteForever size={22} />
 						</button> : null}
 					</div>
 				</div>

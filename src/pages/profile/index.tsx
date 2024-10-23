@@ -300,15 +300,22 @@ export default function ProfilePage() {
 								<Link key={item.id} to={`/@${item.user.username}/${item.slug}`} className='block'>
 									<div className='flex flex-col sm:flex-row items-start'>
 										<div className='flex-1 mb-2 sm:mb-0'>
-											<h4 className='font-semibold text-sm mb-1'>{item.title}</h4>
-											<p className='text-xs text-gray-600 mb-1'>{item.description}</p>
+											<h4 className='font-semibold text-base mb-1 line-clamp-2'>{item.title}</h4>
+											<p className='text-sm text-gray-600 mb-1 line-clamp-3'>{item.description}</p>
 											<div className='flex items-center text-xs text-gray-500'>
 												<span>{formatDate(item.created_at)}</span>
 												<span className="mx-1">·</span>
 												<span>5 min read</span>
 											</div>
 										</div>
-										{item.featuredImage_url && <ImageSet source={item.featuredImage_url} classname='w-full sm:w-16 h-32 sm:h-16 object-cover sm:ml-3 mt-2 sm:mt-0' />}
+										{item.featuredImage_url && (
+											<div className="w-full sm:w-24 h-24 sm:h-16 mt-2 sm:mt-0 sm:ml-3 overflow-hidden">
+												<ImageSet
+													source={item.featuredImage_url}
+													classname='w-full h-full object-cover'
+												/>
+											</div>
+										)}
 									</div>
 								</Link>
 							))

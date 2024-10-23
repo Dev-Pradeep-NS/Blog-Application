@@ -1,6 +1,5 @@
 import axios from "axios"
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import type { ItemType } from "../../interfaces";
 
 export const useReactions = (server_url: string, post_id: number, token: string) => {
 	return useQuery({

@@ -165,7 +165,7 @@ const CategoryPosts = () => {
 													<p className="text-gray-500 text-xxs text-center">{formatDate(item.user.created_at)}</p>
 													<p className="text-gray-700 mt-1 text-center overflow-ellipsis overflow-hidden max-h-14">{item.user.bio || "No bio available"}</p>
 												</div>
-												<p className='text-xs'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
+												<p className='text-sm'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
 											</Link>
 											<ImageSet source={item.featuredImage_url} classname='h-32 sm:h-40 lg:h-48 w-full object-cover mb-3' />
 											<Link to={`/@${item.user.username}/${item.slug}`} className='hover:underline'>
@@ -194,12 +194,12 @@ const CategoryPosts = () => {
 				<div className='w-full lg:w-1/3 mt-6 lg:mt-0 lg:ml-6 px-3 '>
 					<div className='flex flex-row items-center mb-3'>
 						<ImageSet source={memoizedUserData.avatar_url} classname="rounded-full mr-3 object-cover w-10 h-10" />
-						<p className='text-xs font-semibold'>The {memoizedUserData?.username} Blog</p>
+						<p className='text-sm font-semibold'>The {memoizedUserData?.username} Blog</p>
 					</div>
-					<p className='text-xs mb-1.5'>The official Specwise Blogs.</p>
-					<p className='text-xs mb-1.5 text-green-500 cursor-pointer hover:underline'>More information</p>
-					<p className='mb-1.5 text-xs'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
-					<p className='mb-1.5 font-semibold text-xs'>ELSEWHERE</p>
+					<p className='text-sm mb-1.5'>The official Specwise Blogs.</p>
+					<p className='text-sm mb-1.5 text-green-500 cursor-pointer hover:underline'>More information</p>
+					<p className='mb-1.5 text-sm'>Followers - {memoizedFollowers?.followers ? memoizedFollowers?.followers.length : 0}</p>
+					<p className='mb-1.5 font-semibold text-sm'>ELSEWHERE</p>
 					<div className='flex space-x-1.5'>
 						<SocialIcon url='https://www.facebook.com' style={{ height: 20, width: 20 }} />
 						<SocialIcon url='https://www.linkedin.com' style={{ height: 20, width: 20 }} />

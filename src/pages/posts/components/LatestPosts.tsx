@@ -19,8 +19,8 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 								<div key={item.id}>
 									<div className='mb-3 mr-2 flex flex-row justify-between'>
 										<div className='flex-1'>
-											<h1 className='font-bold text-sm sm:text-sm lg:text-sm mb-1'>{item.title}</h1>
-											<p className='lg:text-xs text-xs text-gray-700 line-clamp-2'>{item.description}</p>
+											<h1 className='font-bold text-sm sm:text-sm lg:text-base mb-1'>{item.title}</h1>
+											<p className='lg:text-sm text-sm text-gray-700 line-clamp-2'>{item.description}</p>
 											<br />
 											<div className='flex flex-row items-center '>
 												<Link to={`/@${item.user.username}`} className="relative group">
@@ -31,7 +31,7 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 														<p className="text-gray-700 text-sm mt-1 text-center overflow-ellipsis overflow-hidden max-h-16">{data[0].user.bio || "No bio available"}</p>
 													</div>
 												</Link>
-												<p className='text-xs'>{item.user.username}<br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
+												<p className='lg:text-sm text-xs'><span className="text-green-500">{item.user.username}</span><br />{formatDate(item.created_at)} - {readingTime(item.content)} read</p>
 											</div>
 										</div>
 										{item.featuredImage_url && (
@@ -53,10 +53,10 @@ const LatestPosts = ({ postData, user, followers }: { postData: ItemType[], user
 					<ImageSet source={user.avatar_url} classname='w-8 h-8 rounded-full mr-2' />
 					<p className='text-base'>The {user?.username} Blog</p>
 				</Link>
-				<p className='text-sm font-semibold mb-1'>The official Specwise Blogs.</p>
-				<p className='text-sm mb-1 text-green-500'>More information</p>
-				<p className='text-xs mb-1'>Followers - {followers?.followers ? followers?.followers.length : 0}</p>
-				<p className='text-xs mb-1'>ELSEWHERE</p>
+				<p className='text-base font-semibold mb-1'>The official Specwise Blogs.</p>
+				<p className='text-base mb-1 text-green-500'>More information</p>
+				<p className='text-sm mb-1'>Followers - {followers?.followers ? followers?.followers.length : 0}</p>
+				<p className='text-sm mb-1'>ELSEWHERE</p>
 				<div className='flex flex-row'>
 					<SocialIcon url='https://www.facebook.com' style={{ height: 30, width: 30, margin: '0 1px' }} />
 					<SocialIcon url='mailto:example@email.com' style={{ height: 30, width: 30, margin: '0 1px' }} />
