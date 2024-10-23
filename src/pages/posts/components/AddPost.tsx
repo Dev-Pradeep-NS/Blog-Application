@@ -9,13 +9,14 @@ import 'react-quill/dist/quill.snow.css';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import "react-quill/dist/quill.snow.css";
+import { getEnvVariable } from "../../../utils/helpers/getEnvVariable";
 
 hljs.configure({
 	languages: ['javascript', 'python', 'ruby', 'go', 'typescript', 'java', 'cpp', 'csharp'],
 });
 
 const AddPost: React.FC = () => {
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const navigate = useNavigate();
 	const { token } = useAuth();
 	const [title, setTitle] = useState<string>("");

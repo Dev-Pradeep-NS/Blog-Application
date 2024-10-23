@@ -5,6 +5,7 @@ import { MdOutlineInsertComment } from "react-icons/md";
 import { useState } from "react";
 import { usePostComment, useReplyComment } from "../../../utils/hooks/useComments";
 import { useAuth } from "../../../utils/hooks/AuthContext";
+import { getEnvVariable } from "../../../utils/helpers/getEnvVariable";
 
 interface CommentSectionProps {
 	comments: Comments | undefined;
@@ -15,7 +16,7 @@ interface CommentSectionProps {
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ comments, onClose, username, postId }) => {
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const [showReplyId, setShowReplyId] = useState<number | null>(null)
 	const [showReplies, setShowReplies] = useState<number | null>(null)
 	const [replyText, setReplyText] = useState<string>('')

@@ -7,12 +7,13 @@ import { usePost } from '../../utils/hooks/usePosts';
 import { useUserDetails, useUserFollowers } from '../../utils/hooks/useUserdetails';
 import { useAuth } from '../../utils/hooks/AuthContext';
 import { useUserStore } from '../../store';
+import { getEnvVariable } from '../../utils/helpers/getEnvVariable';
 
 const PostPage = () => {
 	const { token } = useAuth();
 	const [isReady, setIsReady] = useState(false);
 	const { setUserData } = useUserStore()
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: userData } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
 	const user_id = userData?.id ?? 0;

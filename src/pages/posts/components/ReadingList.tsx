@@ -8,6 +8,7 @@ import formatDate from '../../../utils/helpers/formatDate';
 import type { Bookmark, ItemType, User } from '../../../interfaces';
 import { Link } from 'react-router-dom';
 import ImageSet from '../../../components/common/ImageSet';
+import { getEnvVariable } from '../../../utils/helpers/getEnvVariable';
 
 const ImageData = ({ article }: { article: ItemType }) => {
 
@@ -20,7 +21,7 @@ const ImageData = ({ article }: { article: ItemType }) => {
 
 const BookmarkButton = ({ article, user, bookmarkData }: { article: ItemType; user: User; bookmarkData: Bookmark[] }) => {
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { mutate: bookmarkPost } = useBookmarkPost(server_url, article.id, token)
 	return (
 		<button type='button' onClick={() => bookmarkPost()} className='focus:outline-none ml-2'>
@@ -36,7 +37,7 @@ const ReadingList = () => {
 	const [filteredPosts, setFilteredPosts] = useState<ItemType[]>([]);
 	const { user } = useUserStore();
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { isLoading: bookmarkLoading, error: bookmarkError, data: bookmarkData } = useBookmarks(server_url, token);
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(server_url, token);
 

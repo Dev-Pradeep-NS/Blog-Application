@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { useGetAccessToken } from './useGetAccesstoken';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from './useAuth';
+import { getEnvVariable } from '../helpers/getEnvVariable';
 
 const AuthContext = createContext({
 	token: '',
@@ -15,7 +16,7 @@ const AuthContext = createContext({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [token, setToken] = useState<string>('');
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { mutate: getToken } = useGetAccessToken(server_url);
 	const { mutate: logoutMutation } = useLogout(server_url);
 	const navigate = useNavigate();

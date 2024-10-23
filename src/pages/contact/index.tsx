@@ -2,13 +2,14 @@ import type React from 'react';
 import { useState } from 'react';
 import { useAddContact } from '../../utils/hooks/useContact';
 import { useAuth } from '../../utils/hooks/AuthContext';
+import { getEnvVariable } from '../../utils/helpers/getEnvVariable';
 
 const ContactUs: React.FC = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [subject, setSubject] = useState('');
 	const [message, setMessage] = useState('');
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { token } = useAuth();
 	const createContact = useAddContact(server_url, token);
 

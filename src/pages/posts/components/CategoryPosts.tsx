@@ -17,10 +17,11 @@ import { useUserDetails, useUserFollowers } from "../../../utils/hooks/useUserde
 import { Link, useNavigate, useParams } from "react-router-dom";
 import readingTime from "../../../utils/helpers/readingTime";
 import ImageSet from "../../../components/common/ImageSet";
+import { getEnvVariable } from "../../../utils/helpers/getEnvVariable";
 
 const PostItem = ({ id, isLiked, isDisliked, commentCount, likeCount, dislikeCount, isBookmarked }: { id: number, isLiked: boolean, isDisliked: boolean, commentCount: number, likeCount: number, dislikeCount: number, isBookmarked: boolean }) => {
 	const { token } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { mutate: likePost } = useLikePost(server_url, id, token);
 	const { mutate: dislikePost } = useDisLikePost(server_url, id, token);
 	const { mutate: bookmarkPost } = useBookmarkPost(server_url, id, token)
@@ -55,7 +56,7 @@ const CategoryPosts = () => {
 	const { category } = useParams();
 	const navigate = useNavigate();
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const { isLoading: postsLoading, error: postsError, data: postData } = usePost(isReady ? server_url : '', isReady ? token : '');
 	const { isLoading: userLoading, error: userError, data: user } = useUserDetails(isReady ? server_url : '', isReady ? token : '');
 	const user_id = user?.id ?? 0;

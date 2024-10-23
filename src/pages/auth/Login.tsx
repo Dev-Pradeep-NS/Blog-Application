@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 import type { IFormInput } from "../../interfaces";
 import { useAuth } from "../../utils/hooks/AuthContext";
 import { useEffect } from "react";
+import { getEnvVariable } from "../../utils/helpers/getEnvVariable";
 
 const Login = () => {
 	const navigate = useNavigate();
 	const { token, setIsAuthenticated, setToken } = useAuth();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 
 	useEffect(() => {
 		if (token && token.length > 0) {

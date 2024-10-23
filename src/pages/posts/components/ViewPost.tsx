@@ -27,6 +27,7 @@ import DOMPurify from 'dompurify';
 import { useUserStore } from '../../../store';
 import readingTime from '../../../utils/helpers/readingTime';
 import ImageSet from '../../../components/common/ImageSet';
+import { getEnvVariable } from '../../../utils/helpers/getEnvVariable';
 
 const ViewPost = () => {
 	const [speechStatus, setSpeechStatus] = useState(false);
@@ -36,7 +37,7 @@ const ViewPost = () => {
 	const userName = username?.replace("@", "") || '';
 	const { token } = useAuth();
 	const { user } = useUserStore();
-	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
+	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
 	const contentRef = useRef<HTMLDivElement>(null);
 
 	const { isLoading: postLoading, error: postError, data: postData } = useShowPost(server_url, userName, slug || '', token);
