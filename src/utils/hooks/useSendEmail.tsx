@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { useMutation } from 'react-query';
 import type { PostDataForEmail } from '../../interfaces';
-import { getEnvVariable } from '../helpers/getEnvVariable';
 
 interface EmailPayload {
-  to: { email: string, name: string }[];
-  sender: { email: string, name: string };
-  subject: string;
-  htmlContent: string;
+	to: { email: string, name: string }[];
+	sender: { email: string, name: string };
+	subject: string;
+	htmlContent: string;
 }
 
 const emailTemplate = (username: string, post: PostDataForEmail) => `
@@ -119,32 +118,32 @@ const emailTemplate = (username: string, post: PostDataForEmail) => `
 `;
 
 export const useSendEmail = () => {
-  return useMutation({
-    mutationFn: async (data: { users: { Email: string, Username: string }[], post: PostDataForEmail }) => {
-      const email = getEnvVariable("REACT_APP_BREVO_EMAIL") || window.env.REACT_APP_BREVO_EMAIL;
-      const name = getEnvVariable("REACT_APP_BREVO_NAME") || window.env.REACT_APP_BREVO_NAME;
-      const api_key = getEnvVariable("REACT_APP_BREVO_API_KEY") || window.env.REACT_APP_BREVO_API_KEY;
+	return useMutation({
+		mutationFn: async (data: { users: { Email: string, Username: string }[], post: PostDataForEmail }) => {
+			const email = process.env.REACT_APP_BREVO_EMAIL || window.env.REACT_APP_BREVO_EMAIL;
+			const name = process.env.REACT_APP_BREVO_NAME || window.env.REACT_APP_BREVO_NAME;
+			const api_key = process.env.REACT_APP_BREVO_API_KEY || window.env.REACT_APP_BREVO_API_KEY;
 
-      const sender = { email: `${email}`, name: `${name}` };
+			const sender = { email: `${email}`, name: `${name}` };
 
-      const emailPromises = data.users.map(async (user) => {
-        const emailData: EmailPayload = {
-          sender,
-          to: [{ email: user.Email, name: user.Username }],
-          subject: 'New Post in Specwise Blogs',
-          htmlContent: emailTemplate(user.Username, data.post),
-        };
+			const emailPromises = data.users.map(async (user) => {
+				const emailData: EmailPayload = {
+					sender,
+					to: [{ email: user.Email, name: user.Username }],
+					subject: 'New Post in Specwise Blogs',
+					htmlContent: emailTemplate(user.Username, data.post),
+				};
 
-        const response = await axios.post('https://api.brevo.com/v3/smtp/email', emailData, {
-          headers: {
-            'api-key': `${api_key}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        console.log(response);
-      });
+				const response = await axios.post('https://api.brevo.com/v3/smtp/email', emailData, {
+					headers: {
+						'api-key': `${api_key}`,
+						'Content-Type': 'application/json',
+					},
+				});
+				console.log(response);
+			});
 
-      await Promise.all(emailPromises);
-    },
-  });
+			await Promise.all(emailPromises);
+		},
+	});
 };

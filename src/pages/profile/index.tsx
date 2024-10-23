@@ -15,14 +15,13 @@ import { Link, useParams } from "react-router-dom";
 import type { User } from "../../interfaces";
 import formatDate from "../../utils/helpers/formatDate";
 import ImageSet from "../../components/common/ImageSet";
-import { getEnvVariable } from "../../utils/helpers/getEnvVariable";
 
 export default function ProfilePage() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [showFollowers, setShowFollowers] = useState(false);
 	const [showFollowing, setShowFollowing] = useState(false);
 	const { token } = useAuth();
-	const server_url = getEnvVariable('REACT_APP_SERVER_URL') || "https://specwise-server.onrender.com";
+	const server_url = process.env.REACT_APP_SERVER_URL || window.env.REACT_APP_SERVER_URL;
 	const { username } = useParams();
 	const { data: user, refetch } = useUserDetailsById(server_url, token, username?.replace("@", ""));
 	const { user: currentUser } = useUserStore();
