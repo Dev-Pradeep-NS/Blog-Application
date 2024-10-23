@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json first to leverage Docker cache
 COPY package*.json ./
 
-# Install dependencies using ci for faster builds
-RUN npm ci
+# Install dependencies
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
@@ -21,20 +21,20 @@ FROM nginx:alpine
 # Copy built assets from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy the env template for runtime configuration
+COPY ./public/env.template /usr/share/nginx/html/env.template
+
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for HTTP
 EXPOSE 80
 
-# Create a non-root user for security
-RUN addgroup -S nginx && adduser -S nginx -G nginx
+# Copy the start script
+COPY start.sh /usr/local/bin/start.sh
 
-# Change ownership of the Nginx html directory
-RUN chown -R nginx:nginx /usr/share/nginx/html
+# Make the start script executable
+RUN chmod +x /usr/local/bin/start.sh
 
-# Switch to non-root user
-USER nginx
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Set the entrypoint to the start script
+ENTRYPOINT ["/usr/local/bin/start.sh"]
